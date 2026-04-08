@@ -1,0 +1,266 @@
+{
+  "speakers": {
+    "四国めたん": {
+      "latin": "Shikoku Metan",
+      "tr": "Shikoku Metan",
+      "description_tr": "Net ve kendinden emin bir kadın sesi."
+    },
+    "ずんだもん": {
+      "latin": "Zundamon",
+      "tr": "Zundamon",
+      "description_tr": "Cocuksu ve yuksek tonlu bir ses."
+    },
+    "春日部つむぎ": {
+      "latin": "Kasukabe Tsumugi",
+      "tr": "Kasukabe Tsumugi",
+      "description_tr": "Canli ve parlak bir ses."
+    },
+    "雨晴はう": {
+      "latin": "Amehare Hau",
+      "tr": "Amehare Hau",
+      "description_tr": "Nazik ve tatli bir ses."
+    },
+    "波音リツ": {
+      "latin": "Namine Ritsu",
+      "tr": "Namine Ritsu",
+      "description_tr": "Daha dusuk ve cool bir ses."
+    },
+    "玄野武宏": {
+      "latin": "Kurono Takehiro",
+      "tr": "Kurono Takehiro",
+      "description_tr": "Genc yetiskin erkek hissi veren ferah bir ses."
+    },
+    "白上虎太郎": {
+      "latin": "Shirakami Kotaro",
+      "tr": "Shirakami Kotaro",
+      "description_tr": "Sesi yeni kalinlasmis bir genc erkek tonu."
+    },
+    "青山龍星": {
+      "latin": "Aoyama Ryusei",
+      "tr": "Aoyama Ryusei",
+      "description_tr": "Agir ve dusuk frekansli bir erkek sesi."
+    },
+    "冥鳴ひまり": {
+      "latin": "Meimei Himari",
+      "tr": "Meimei Himari",
+      "description_tr": "Yumusak ve sicak bir ses."
+    },
+    "九州そら": {
+      "latin": "Kyushu Sora",
+      "tr": "Kyushu Sora",
+      "description_tr": "Zarif ve olgun bir ses."
+    },
+    "もち子さん": {
+      "latin": "Mochiko-san",
+      "tr": "Mochiko-san",
+      "description_tr": "Net ve sakin bir ses."
+    },
+    "剣崎雌雄": {
+      "latin": "Kenzaki Mesuo",
+      "tr": "Kenzaki Mesuo",
+      "description_tr": "Guven veren, dengeli bir ses."
+    },
+    "WhiteCUL": {
+      "latin": "WhiteCUL",
+      "tr": "WhiteCUL",
+      "description_tr": "Dinlemesi rahat, duz ve temiz bir ses."
+    },
+    "後鬼": {
+      "latin": "Goki",
+      "tr": "Goki",
+      "description_tr": "Kucaklayici ve agirbasli bir ses."
+    },
+    "No.7": {
+      "latin": "No.7",
+      "tr": "No.7",
+      "description_tr": "Saglam ve vakur bir ses."
+    },
+    "ちび式じい": {
+      "latin": "Chibi Shiki-jii",
+      "tr": "Chibi Shiki-jii",
+      "description_tr": "Samimi, hafif kisik bir yasli sesi."
+    },
+    "櫻歌ミコ": {
+      "latin": "Ouka Miko",
+      "tr": "Ouka Miko",
+      "description_tr": "Sevimli bir kiz sesi."
+    },
+    "小夜/SAYO": {
+      "latin": "Sayo",
+      "tr": "Sayo",
+      "description_tr": "Sakin ve yumusak huylu bir ses."
+    },
+    "ナースロボ＿タイプＴ": {
+      "latin": "Nurse Robo Type-T",
+      "tr": "Nurse Robo Type-T",
+      "description_tr": "Sogukkanli ve olculu bir robotik ses."
+    },
+    "†聖騎士 紅桜†": {
+      "latin": "Holy Knight Benizakura",
+      "tr": "Holy Knight Benizakura",
+      "description_tr": "Neseli ve belirgin artikulasyonlu bir ses."
+    },
+    "雀松朱司": {
+      "latin": "Wakamatsu Akashi",
+      "tr": "Wakamatsu Akashi",
+      "description_tr": "Sessiz, dengeli ve stabil bir ses."
+    },
+    "麒ヶ島宗麟": {
+      "latin": "Kigashima Sourin",
+      "tr": "Kigashima Sourin",
+      "description_tr": "Oturakli amca tonu."
+    },
+    "春歌ナナ": {
+      "latin": "Haruka Nana",
+      "tr": "Haruka Nana",
+      "description_tr": "Canli ve guclu bir ses."
+    },
+    "猫使アル": {
+      "latin": "Nekotsukai Aru",
+      "tr": "Nekotsukai Aru",
+      "description_tr": "Dolgun ve samimi bir ses."
+    },
+    "猫使ビィ": {
+      "latin": "Nekotsukai Bii",
+      "tr": "Nekotsukai Bii",
+      "description_tr": "Saf ve masum bir kiz tonu."
+    },
+    "中国うさぎ": {
+      "latin": "Chugoku Usagi",
+      "tr": "Chugoku Usagi",
+      "description_tr": "Gizemli ama taze his veren bir ses."
+    },
+    "栗田まろん": {
+      "latin": "Kurita Maron",
+      "tr": "Kurita Maron",
+      "description_tr": "Derin ve androjeni bir ses."
+    },
+    "あいえるたん": {
+      "latin": "IL-tan",
+      "tr": "IL-tan",
+      "description_tr": "Rahatlatan, yumusak bir ses."
+    },
+    "満別花丸": {
+      "latin": "Manbetsu Hanamaru",
+      "tr": "Manbetsu Hanamaru",
+      "description_tr": "Canli ve dikkat ceken bir ses."
+    },
+    "琴詠ニア": {
+      "latin": "Kotoyomi Nia",
+      "tr": "Kotoyomi Nia",
+      "description_tr": "Akici ama mekanik his veren bir ses."
+    },
+    "Voidoll": {
+      "latin": "Voidoll",
+      "tr": "Voidoll",
+      "description_tr": "Elektronik ve cekingen bir ses."
+    },
+    "ぞん子": {
+      "latin": "Zonko",
+      "tr": "Zonko",
+      "description_tr": "Ateşli ve canli bir ses."
+    },
+    "中部つるぎ": {
+      "latin": "Chubu Tsurugi",
+      "tr": "Chubu Tsurugi",
+      "description_tr": "Heybetli ve varligi guclu bir ses."
+    },
+    "離途": {
+      "latin": "Rito",
+      "tr": "Rito",
+      "description_tr": "Nefesli, sarip sarmalayan bir ses."
+    },
+    "黒沢冴白": {
+      "latin": "Kurosawa Kohaku",
+      "tr": "Kurosawa Kohaku",
+      "description_tr": "Kendine guvenen ve guclu cikan bir ses."
+    },
+    "ユーレイちゃん": {
+      "latin": "Yurei-chan",
+      "tr": "Yurei-chan",
+      "description_tr": "Yumusak ve dalgali his veren bir ses."
+    },
+    "東北ずん子": {
+      "latin": "Tohoku Zunko",
+      "tr": "Tohoku Zunko",
+      "description_tr": "Zarif ve sempatik bir ses."
+    },
+    "東北きりたん": {
+      "latin": "Tohoku Kiritan",
+      "tr": "Tohoku Kiritan",
+      "description_tr": "Duru ve mutevazi bir ses."
+    },
+    "東北イタコ": {
+      "latin": "Tohoku Itako",
+      "tr": "Tohoku Itako",
+      "description_tr": "Zarif ve yankisi olan bir ses."
+    },
+    "あんこもん": {
+      "latin": "Ankomon",
+      "tr": "Ankomon",
+      "description_tr": "Kontrollu ama hirsli bir ses."
+    }
+  },
+  "styles": {
+    "ノーマル": "Normal",
+    "あまあま": "Cok tatli",
+    "甘々": "Cok tatli",
+    "ツンツン": "Tsundere / sert",
+    "セクシー": "Seksi",
+    "ささやき": "Fisilti",
+    "ヒソヒソ": "Cok kisik ses",
+    "へろへろ": "Bitkin",
+    "ヘロヘロ": "Bitkin",
+    "なみだめ": "Aglamakli",
+    "クイーン": "Kralice",
+    "喜び": "Neseli",
+    "ツンギレ": "Sert ve ofkeli",
+    "悲しみ": "Uzgun",
+    "かなしみ": "Uzgun",
+    "ふつう": "Duz",
+    "わーい": "Sevincli",
+    "びくびく": "Tedirgin",
+    "おこ": "Kizgin",
+    "びえーん": "Aglayan",
+    "熱血": "Atesli",
+    "不機嫌": "Somurtkan",
+    "しっとり": "Yumusak / duygulu",
+    "囁き": "Fisilti",
+    "楽々": "Rahat",
+    "恐怖": "Korku",
+    "内緒話": "Sir verir gibi",
+    "人間ver.": "Insan surumu",
+    "ぬいぐるみver.": "Pelus surumu",
+    "人間（怒り）ver.": "Insan surumu (kizgin)",
+    "鬼ver.": "Oni surumu",
+    "アナウンス": "Anons",
+    "読み聞かせ": "Masal gibi okuma",
+    "第二形態": "Ikinci form",
+    "ロリ": "Loli",
+    "おちつき": "Sakin",
+    "うきうき": "Keyifli",
+    "つよつよ": "Guclu",
+    "人見知り": "Cekingen",
+    "おどろき": "Saskin",
+    "こわがり": "Korkak",
+    "元気": "Enerjik",
+    "ぶりっ子": "Cilveli",
+    "ボーイ": "Erkeksi",
+    "低血圧": "Uykulu",
+    "覚醒": "Uyanmis",
+    "実況風": "Yayinci gibi",
+    "おどおど": "Urkek",
+    "絶望と敗北": "Umutsuz ve yenilmis",
+    "シリアス": "Ciddi",
+    "哀しみ": "Huzunlu",
+    "ツクモちゃん": "Tsukumo-chan modu",
+    "よわよわ": "Zayif",
+    "けだるげ": "Bikkin",
+    "セクシー／あん子": "Seksi / Anko",
+    "泣き": "Aglamakli",
+    "怒り": "Ofkeli",
+    "のんびり": "Agir agir / rahat",
+    "たのしい": "Eglenceli",
+    "かなしい": "Uzgun"
+  }
+}

@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neko Voice Deck</title>
+  <style>
+    :root{--bg1:#eef8ff;--bg2:#fcebe7;--card:rgba(255,250,247,.86);--line:rgba(42,28,58,.12);--ink:#24182e;--muted:#6c6277;--navy:#24314d;--blue:#6eaedc;--mint:#8dd0c5;--pink:#ffc5d7;--gold:#f1d897;--shadow:0 18px 42px rgba(38,26,48,.13);--r1:28px;--r2:20px;--r3:14px}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:"Yu Gothic UI","Trebuchet MS","Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 14%,rgba(255,255,255,.82),transparent 14%),radial-gradient(circle at 84% 14%,rgba(255,207,225,.58),transparent 18%),linear-gradient(180deg,var(--bg1),var(--bg2));overflow:auto}
+    body:before{content:"";position:fixed;right:-70px;top:-80px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9) 0 20%,rgba(255,255,255,.22) 36%,rgba(255,255,255,0) 70%);pointer-events:none}
+    .app{position:relative;z-index:1;width:min(1600px,calc(100% - 20px));min-height:calc(100vh - 20px);height:auto;margin:10px auto;display:grid;grid-template-columns:390px minmax(0,1fr);gap:16px;align-items:start}
+    .card{background:linear-gradient(180deg,var(--card),rgba(255,252,249,.7));border:1px solid rgba(255,255,255,.82);border-radius:var(--r1);box-shadow:var(--shadow);backdrop-filter:blur(12px);overflow:hidden}
+    .left{display:grid;grid-template-rows:auto auto auto;gap:16px;align-content:start}
+    .hero,.controls,.telemetry,.topbar,.selection,.recent,.catalog{padding:18px}
+    .hero{position:relative;background:radial-gradient(circle at top right,rgba(255,215,233,.8),transparent 34%),radial-gradient(circle at bottom left,rgba(156,209,255,.32),transparent 28%),linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,248,244,.8))}
+    .hero:before,.hero:after{content:"";position:absolute;top:-14px;width:54px;height:54px;background:linear-gradient(180deg,#fff5f3,#cde3ff);clip-path:polygon(50% 0,100% 100%,0 100%)}
+    .hero:before{left:34px;transform:rotate(-10deg)} .hero:after{left:86px;transform:rotate(10deg)}
+    .eyebrow,.pill,.stat,.chip,.event-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.72);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+    .eyebrow{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
+    .eyebrow:before{content:"";width:8px;height:8px;border-radius:999px;background:linear-gradient(135deg,var(--blue),var(--pink))}
+    h1,h2,h3{margin:0;font-family:"Palatino Linotype","Book Antiqua",Georgia,serif;letter-spacing:-.03em}
+    h1{margin-top:12px;font-size:40px;line-height:.95;color:#202c46} h2{font-size:28px;color:#24314d} h3{font-size:24px;color:#24314d}
+    .copy,.sub{margin:10px 0 0;color:var(--muted);line-height:1.55;font-size:13px}
+    .hero .row,.controls .row,.topbar .row,.selection .row,.catalog .row{display:flex;flex-wrap:wrap;gap:10px}
+    .hero .stats{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .stat{justify-content:space-between;padding:12px 14px;border-radius:18px;min-width:0}
+    .stat span{color:var(--muted);font-size:12px} .stat strong{font-size:20px;color:var(--navy);font-family:"Palatino Linotype",Georgia,serif}
+    .pill{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700} .pill.ok{color:#225c55;background:rgba(141,208,197,.18)} .pill.warn{color:#8c4a31;background:rgba(241,216,151,.32)}
+    .controls{display:grid;gap:12px}
+    .head{display:flex;justify-content:space-between;gap:14px;align-items:start}
+    .mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    label{display:grid;gap:7px;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+    .topbar label{text-transform:none;letter-spacing:0;font-size:13px}
+    input,select,textarea,button{font:inherit}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.92);color:var(--ink);outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.66)}
+    input:focus,select:focus,textarea:focus{border-color:rgba(110,174,220,.44);box-shadow:0 0 0 4px rgba(156,209,255,.18)}
+    textarea{min-height:110px;resize:none;line-height:1.55}
+    .style-tags{display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .tag-chip{display:flex;align-items:center;gap:10px;min-width:0;padding:10px 12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.86);color:var(--navy);text-align:left}
+    .tag-chip.active{background:linear-gradient(135deg,rgba(156,209,255,.24),rgba(255,216,231,.4));border-color:rgba(110,174,220,.34)}
+    .tag-id{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;background:linear-gradient(135deg,#24314d,#5a8dc1);color:#fff;font-size:12px;font-weight:800}
+    .tag-copy{display:grid;gap:2px;min-width:0}
+    .tag-copy strong{font-size:13px;line-height:1.1}
+    .tag-copy span{font-size:11px;color:var(--muted);line-height:1.2}
+    .tag-note{padding:10px 12px;border:1px dashed rgba(42,28,58,.18);border-radius:16px;background:rgba(255,255,255,.6);color:var(--muted);font-size:12px;line-height:1.45}
+    .sliders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .slider{padding:10px 12px 12px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.72)}
+    .slider b{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    .slider .top{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}
+    input[type=range]{padding:0;border:0;background:transparent;accent-color:var(--blue)}
+    button{border:0;border-radius:16px;padding:11px 14px;cursor:pointer;font-weight:700;transition:transform .12s ease,opacity .12s ease,box-shadow .12s ease}
+    button:hover{transform:translateY(-1px)} button:disabled{opacity:.6;cursor:wait;transform:none}
+    .primary{color:#fff;background:linear-gradient(135deg,#24314d,#4f7ab3 56%,#7bc7d6);box-shadow:0 14px 22px rgba(59,99,150,.24)}
+    .secondary{color:var(--navy);background:rgba(255,255,255,.86);border:1px solid var(--line)}
+    .ghost{color:#276057;background:rgba(141,208,197,.16);border:1px solid rgba(141,208,197,.24)}
+    .status{padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.76);color:var(--muted);min-height:46px;font-size:13px;line-height:1.45}
+    audio{width:100%}
+    .telemetry{display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0}
+    .tabs{display:flex;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .tab-btn{flex:1 1 0;background:rgba(255,255,255,.68);border:1px solid transparent;color:var(--muted)}
+    .tab-btn.active{background:linear-gradient(135deg,rgba(156,209,255,.22),rgba(255,255,255,.92));border-color:rgba(110,174,220,.24);color:var(--navy)}
+    .tab-panels{margin-top:12px;min-height:0;display:grid}
+    .tab{display:none;min-height:0} .tab.active{display:block;height:100%}
+    pre,.events{margin:0;max-height:min(34vh,360px);overflow:auto;border-radius:18px;padding:14px;border:1px solid var(--line);background:rgba(255,255,255,.74);color:#372a42;font-size:12px;line-height:1.55}
+    .right{display:grid;grid-template-rows:auto auto auto;gap:12px;align-content:start}
+    .topbar{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:center}
+    .legend{display:flex;flex-wrap:wrap;gap:8px} .chip{padding:7px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .meta{font-size:11px;color:var(--muted);line-height:1.45}
+    .split{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:12px}
+    .selection{display:grid;gap:14px;background:radial-gradient(circle at top right,rgba(255,215,233,.78),transparent 30%),linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,249,246,.82))}
+    .avatar{display:grid;grid-template-columns:86px minmax(0,1fr);gap:14px;align-items:center}
+    .badge{width:86px;height:86px;border-radius:28px;display:grid;place-items:center;background:linear-gradient(145deg,#9fd0fb,#fff 52%,#ffc7d9);border:1px solid rgba(255,255,255,.92);font:700 28px "Palatino Linotype",Georgia,serif;color:var(--navy);position:relative}
+    .badge:before,.badge:after{content:"";position:absolute;top:-10px;width:26px;height:26px;background:linear-gradient(180deg,#ffe7f0,#cce1ff);clip-path:polygon(50% 0,100% 100%,0 100%)} .badge:before{left:12px;transform:rotate(-12deg)} .badge:after{right:12px;transform:rotate(12deg)}
+    .selection .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .mini-stat{padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.76)}
+    .mini-stat span{display:block} .mini-stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em} .mini-stat .v{margin-top:6px;font-size:16px;font-weight:700;color:var(--navy);word-break:break-word}
+    .recent{display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0}
+    .events{display:grid;gap:10px;align-content:start;padding:10px}
+    .event{padding:12px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(244,249,255,.72))}
+    .event .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+    .event-tag{padding:5px 8px;border-radius:999px;font-size:11px;color:#315379;background:rgba(156,209,255,.2)}
+    .event p{margin:0;font-size:12px;line-height:1.5;color:#3e3248;white-space:pre-wrap;word-break:break-word}
+    .catalog{display:grid;grid-template-rows:auto auto}
+    .voice-scroll{overflow:auto;max-height:min(58vh,760px);padding-right:6px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-content:start}
+    .voice{padding:16px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(251,248,255,.72));border:1px solid rgba(255,255,255,.84);box-shadow:0 8px 20px rgba(45,31,58,.08);display:grid;gap:12px;position:relative}
+    .voice:before{content:"";position:absolute;top:0;left:16px;right:16px;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--pink),var(--gold))}
+    .voice h4{font-size:26px;color:var(--navy);padding-top:6px}
+    .jp{color:var(--muted);font-size:13px}
+    .desc{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.48}
+    .styles{display:flex;flex-wrap:wrap;gap:8px}
+    .swrap{display:flex;gap:6px;align-items:stretch}
+    .sbtn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.88);color:#32435e;min-width:0;text-align:left}
+    .sbtn.active{background:linear-gradient(135deg,rgba(156,209,255,.28),rgba(255,216,231,.42));border-color:rgba(110,174,220,.34)}
+    .sid{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:12px;background:linear-gradient(135deg,#24314d,#5a8dc1);color:#fff;font-size:12px;font-weight:800}
+    .scopy{display:grid;gap:2px;min-width:0} .scopy strong{font-size:13px;line-height:1.1} .scopy span{font-size:11px;color:var(--muted);line-height:1.2}
+    .play{width:42px;display:grid;place-items:center;padding:0;border-radius:14px;background:rgba(141,208,197,.16);color:#25584f;border:1px solid rgba(141,208,197,.24)}
+    .empty{padding:24px;border-radius:18px;border:1px dashed rgba(42,28,58,.24);text-align:center;color:var(--muted);background:rgba(255,255,255,.56)}
+    ::-webkit-scrollbar{width:10px;height:10px} ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(110,174,220,.44),rgba(255,197,215,.5));border-radius:999px;border:2px solid rgba(255,255,255,.68)} ::-webkit-scrollbar-track{background:rgba(255,255,255,.3);border-radius:999px}
+    /* ── Phrase Atelier ── */
+    .phrase-atelier{display:grid;gap:14px}
+    .phrase-atelier .head{cursor:pointer;user-select:none}
+    .phrase-atelier .head h3:after{content:" ▾";font-size:16px;opacity:.5;transition:transform .2s ease}
+    .phrase-atelier.collapsed .head h3:after{content:" ▸"}
+    .phrase-atelier.collapsed .pa-body{display:none}
+    .pa-body{display:grid;gap:14px}
+    .pa-hero-stat{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line);background:rgba(255,255,255,.72);color:var(--navy)}
+    .pa-hero-stat:before{content:"✦";color:var(--pink)}
+    .category-pills{display:flex;flex-wrap:wrap;gap:8px}
+    .cat-pill{padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line);background:rgba(255,255,255,.72);color:var(--muted);cursor:pointer;transition:all .15s ease}
+    .cat-pill:hover{transform:translateY(-1px);background:rgba(255,255,255,.92)}
+    .cat-pill.active{background:linear-gradient(135deg,rgba(156,209,255,.28),rgba(255,216,231,.42));border-color:rgba(110,174,220,.34);color:var(--navy)}
+    .cat-pill .cat-count{opacity:.55;font-weight:400;margin-left:2px}
+    .compose-queue{padding:12px;border:1px dashed rgba(42,28,58,.2);border-radius:18px;background:rgba(255,255,255,.5);display:grid;gap:10px}
+    .compose-queue.empty .queue-chips,.compose-queue.empty .queue-actions{display:none}
+    .compose-queue .queue-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+    .queue-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:0}
+    .queue-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;font-size:13px;background:linear-gradient(135deg,rgba(156,209,255,.18),rgba(255,216,231,.28));border:1px solid rgba(110,174,220,.24);color:var(--navy);cursor:default;animation:chipIn .2s ease}
+    .queue-chip .qc-remove{cursor:pointer;opacity:.5;font-size:11px;line-height:1}
+    .queue-chip .qc-remove:hover{opacity:1;color:#c44}
+    @keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+    .queue-actions{display:flex;flex-wrap:wrap;gap:8px}
+    .phrase-scroll{overflow:auto;max-height:min(52vh,640px);padding-right:4px}
+    .phrase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;align-content:start}
+    .phrase-card{padding:14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(251,248,255,.72));border:1px solid rgba(255,255,255,.84);box-shadow:0 4px 14px rgba(45,31,58,.06);display:grid;gap:8px;position:relative;transition:transform .12s ease,box-shadow .12s ease}
+    .phrase-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(45,31,58,.1)}
+    .phrase-card .pc-romaji{font-size:12px;color:var(--muted);letter-spacing:.02em}
+    .phrase-card .pc-kana{font-size:18px;font-weight:700;color:var(--navy);font-family:"Yu Gothic UI","Hiragino Sans",sans-serif;line-height:1.3}
+    .phrase-card .pc-mood{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;width:fit-content}
+    .pc-mood.mood-happy{background:rgba(141,208,197,.2);color:#225c55}
+    .pc-mood.mood-cute{background:rgba(255,197,215,.3);color:#8c4a6e}
+    .pc-mood.mood-angry{background:rgba(241,168,151,.25);color:#8c3a31}
+    .pc-mood.mood-sad{background:rgba(156,180,220,.25);color:#3a4a6e}
+    .pc-mood.mood-neutral{background:rgba(200,195,210,.2);color:#5a5068}
+    .pc-mood.mood-excited{background:rgba(241,216,151,.3);color:#7a6a30}
+    .pc-mood.mood-love{background:rgba(255,170,200,.3);color:#9c3060}
+    .pc-mood.mood-battle{background:rgba(180,140,200,.25);color:#5a3a6e}
+    .phrase-card .pc-actions{display:flex;flex-wrap:wrap;gap:6px}
+    .phrase-card .pc-actions button{padding:6px 10px;font-size:11px;border-radius:12px}
+    .pa-insert{color:#fff;background:linear-gradient(135deg,#24314d,#5a8dc1);box-shadow:0 4px 10px rgba(59,99,150,.2)}
+    .pa-copy{color:var(--navy);background:rgba(255,255,255,.86);border:1px solid var(--line)}
+    .pa-test{color:#276057;background:rgba(141,208,197,.16);border:1px solid rgba(141,208,197,.24)}
+    .pa-queue{color:#5a3a6e;background:rgba(200,180,230,.16);border:1px solid rgba(180,160,210,.24)}
+    .phrase-card .pc-fav{position:absolute;top:10px;right:10px;background:none;border:0;padding:4px;font-size:16px;cursor:pointer;opacity:.35;transition:opacity .15s ease,transform .15s ease;line-height:1}
+    .phrase-card .pc-fav:hover{opacity:.7;transform:scale(1.2)}
+    .phrase-card .pc-fav.faved{opacity:1;color:#e0607e;transform:scale(1.1)}
+    .phrase-empty{padding:24px;border-radius:18px;border:1px dashed rgba(42,28,58,.24);text-align:center;color:var(--muted);background:rgba(255,255,255,.56)}
+    @media (max-width:1220px){body{overflow:auto}.app{width:min(100% - 16px,100%);height:auto;min-height:calc(100vh - 16px);margin:8px;grid-template-columns:1fr}.left,.right,.catalog,.telemetry{min-height:auto}.voice-scroll,.events,pre,.phrase-scroll{max-height:none}}
+    @media (max-width:860px){.mini,.sliders,.hero .stats,.selection .stats,.split,.topbar{grid-template-columns:1fr}.avatar{grid-template-columns:1fr}.phrase-grid{grid-template-columns:1fr}}
+    @media (max-width:560px){.app{width:min(100% - 12px,100%);margin:6px}.hero,.controls,.telemetry,.topbar,.selection,.recent,.catalog,.phrase-atelier{padding:14px}h1,h2,h3{font-size:24px}.grid{grid-template-columns:1fr}.style-tags{grid-template-columns:1fr}.row button,.style-tags button{width:100%}.phrase-grid{grid-template-columns:1fr}.queue-actions button{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="left">
+      <section class="card hero">
+        <div class="eyebrow">Moonlit Neko Voice Deck</div>
+        <h1>Anime voice control without the endless scroll.</h1>
+        <p class="copy">The player, test button, exact style tags, and browser now live in one compact desktop deck.</p>
+        <div class="row" style="margin-top:16px">
+          <span class="pill warn" id="bridge-pill">Bridge: checking</span>
+          <span class="pill warn" id="engine-pill">Engine: checking</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>Speakers</span><strong id="speaker-count">0</strong></div>
+          <div class="stat"><span>Styles</span><strong id="voice-count">0</strong></div>
+          <div class="stat"><span>Selected</span><strong id="selected-voice-hero">-</strong></div>
+          <div class="stat"><span>Last mood</span><strong id="last-mood-hero">-</strong></div>
+        </div>
+      </section>
+
+      <section class="card controls">
+        <div class="head">
+          <div>
+            <h2>Quick Test</h2>
+            <p class="sub">Select on the right, test from here, never lose the player.</p>
+          </div>
+          <button class="primary" id="test-btn" type="button">Play Test</button>
+        </div>
+        <div class="mini">
+          <label for="model">Model
+            <select id="model">
+              <option value="voicevox">voicevox</option>
+              <option value="voicevox-tts">voicevox-tts</option>
+              <option value="voicevox-tts-tr">voicevox-tts-tr</option>
+              <option value="voicevox-tts-en">voicevox-tts-en</option>
+              <option value="voicevox-tts-raw">voicevox-tts-raw</option>
+            </select>
+          </label>
+          <label for="voice-id">Voice ID
+            <input id="voice-id" type="text" value="3" placeholder="58 or 3">
+          </label>
+        </div>
+        <textarea id="input-text">Merhaba askim... bugun nasil hissediyorsun?</textarea>
+        <div class="style-tags" id="style-tags"></div>
+        <div class="tag-note" id="style-tags-note">Pick a voice on the right. This area will show exact style tags supported by that character family.</div>
+        <div class="sliders">
+          <div class="slider"><div class="top"><b>Speed</b><span id="speed-value">1.00</span></div><input id="speed" type="range" min="0.5" max="3" step="0.05" value="1"></div>
+          <div class="slider"><div class="top"><b>Pitch</b><span id="pitch-value">0.00</span></div><input id="pitch" type="range" min="-0.8" max="0.8" step="0.01" value="0"></div>
+          <div class="slider"><div class="top"><b>Intonation</b><span id="intonation-value">1.00</span></div><input id="intonation" type="range" min="0.2" max="2" step="0.01" value="1"></div>
+          <div class="slider"><div class="top"><b>Volume</b><span id="volume-value">1.00</span></div><input id="volume" type="range" min="0.2" max="2" step="0.01" value="1"></div>
+        </div>
+        <audio id="audio-player" controls preload="none"></audio>
+        <div class="row">
+          <button class="secondary" id="copy-config-btn" type="button">Copy AIRI config</button>
+          <button class="ghost" id="copy-voice-btn" type="button">Copy voice ID</button>
+          <button class="ghost" id="refresh-btn" type="button">Refresh status</button>
+        </div>
+        <div class="status" id="status-line">Ready. Pick a voice chip on the right, then test from here.</div>
+      </section>
+
+      <section class="card telemetry">
+        <div class="tabs">
+          <button class="tab-btn active" type="button" data-tab-target="config-preview">AIRI</button>
+          <button class="tab-btn" type="button" data-tab-target="request-preview">Request</button>
+          <button class="tab-btn" type="button" data-tab-target="response-preview">Response</button>
+        </div>
+        <div class="tab-panels">
+          <pre id="config-preview" class="tab active"></pre>
+          <pre id="request-preview" class="tab"></pre>
+          <pre id="response-preview" class="tab">No request yet.</pre>
+        </div>
+      </section>
+    </aside>
+
+    <section class="right">
+      <section class="card topbar">
+        <div>
+          <label for="search">Search by character, tone, Japanese name, or ID
+            <input id="search" type="search" placeholder="Nekotsukai, shy, whisper, Zundamon, 58">
+          </label>
+          <div class="legend" style="margin-top:10px">
+            <span class="chip">Click chip = select</span>
+            <span class="chip">Play = instant preview</span>
+            <span class="chip">Exact tags stay in-family</span>
+          </div>
+        </div>
+        <div class="row" style="justify-content:space-between;align-items:start">
+          <button class="secondary" id="recent-btn" type="button">Refresh recent</button>
+          <div class="meta">Generated: __GENERATED_AT__<br>Bridge: __BRIDGE_BASE_URL__<br>Engine: __ENGINE_BASE_URL__</div>
+        </div>
+      </section>
+
+      <div class="split">
+        <section class="card selection">
+          <div class="avatar">
+            <div class="badge" id="portrait-badge">VX</div>
+            <div>
+              <div class="eyebrow">Current Persona</div>
+              <h2 id="selected-character" style="margin-top:10px">No voice selected</h2>
+              <p class="sub" id="selected-style">Pick a style chip from the wardrobe.</p>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="mini-stat"><span class="k">Mood engine</span><span class="v" id="selected-mood-mode">auto</span></div>
+            <div class="mini-stat"><span class="k">Text mode</span><span class="v" id="selected-text-mode">raw</span></div>
+            <div class="mini-stat"><span class="k">Model</span><span class="v" id="selected-model-readout">voicevox</span></div>
+            <div class="mini-stat"><span class="k">Family</span><span class="v" id="selected-family">-</span></div>
+          </div>
+          <div class="status" id="selected-blurb">Voice description will appear here after you pick a style.</div>
+        </section>
+
+        <section class="card recent">
+          <div class="head"><div><h3>Recent Decisions</h3><p class="sub">Mood switches, resolved IDs, and line previews.</p></div></div>
+          <div class="events" id="recent-events">Loading recent events...</div>
+        </section>
+      </div>
+
+      <section class="card catalog">
+        <div class="head"><div><h3>Voice Wardrobe</h3><p class="sub">Compact anime-styled cards for quick scanning.</p></div></div>
+        <div class="voice-scroll">
+          <div class="grid" id="voice-grid"></div>
+          <div class="empty" id="empty-state" hidden>No voices match this filter.</div>
+        </div>
+      </section>
+
+      <section class="card phrase-atelier" id="phrase-atelier">
+        <div class="head" id="pa-toggle">
+          <div>
+            <h3>Anime Phrase Atelier</h3>
+            <p class="sub">TTS-safe Japanese phrases for your AI companion. Click to insert fixed kana directly.</p>
+          </div>
+          <span class="pa-hero-stat" id="phrase-count-stat">0 phrases</span>
+        </div>
+        <div class="pa-body">
+          <div class="category-pills" id="category-pills"></div>
+          <input id="phrase-search" type="search" placeholder="Search by romaji or kana...">
+          <div class="compose-queue empty" id="compose-queue">
+            <span class="queue-label">Compose Queue</span>
+            <div class="queue-chips" id="queue-chips"></div>
+            <div class="queue-actions">
+              <button class="pa-insert" id="queue-add-btn" type="button">Add to input</button>
+              <button class="pa-copy" id="queue-replace-btn" type="button">Replace input</button>
+              <button class="ghost" id="queue-clear-btn" type="button">Clear queue</button>
+            </div>
+          </div>
+          <div class="phrase-scroll">
+            <div class="phrase-grid" id="phrase-grid"></div>
+            <div class="phrase-empty" id="phrase-empty" hidden>No phrases match this filter.</div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script id="voice-data" type="application/json">__VOICE_DATA_JSON__</script>
+  <script id="phrase-data" type="application/json">__PHRASE_DATA_JSON__</script>
+  <script>
+    const bridgeApiBase="__BRIDGE_BASE_URL__",engineBaseUrl="__ENGINE_BASE_URL__",voices=JSON.parse(document.getElementById("voice-data").textContent);
+    const $=id=>document.getElementById(id),els={speakerCount:$("speaker-count"),voiceCount:$("voice-count"),selectedVoiceHero:$("selected-voice-hero"),lastMoodHero:$("last-mood-hero"),model:$("model"),voiceId:$("voice-id"),inputText:$("input-text"),styleTags:$("style-tags"),styleTagsNote:$("style-tags-note"),speed:$("speed"),pitch:$("pitch"),intonation:$("intonation"),volume:$("volume"),speedValue:$("speed-value"),pitchValue:$("pitch-value"),intonationValue:$("intonation-value"),volumeValue:$("volume-value"),bridgePill:$("bridge-pill"),enginePill:$("engine-pill"),statusLine:$("status-line"),audio:$("audio-player"),requestPreview:$("request-preview"),responsePreview:$("response-preview"),recentEvents:$("recent-events"),configPreview:$("config-preview"),search:$("search"),voiceGrid:$("voice-grid"),emptyState:$("empty-state"),testBtn:$("test-btn"),selectedCharacter:$("selected-character"),selectedStyle:$("selected-style"),selectedBlurb:$("selected-blurb"),selectedMoodMode:$("selected-mood-mode"),selectedTextMode:$("selected-text-mode"),selectedModelReadout:$("selected-model-readout"),selectedFamily:$("selected-family"),portraitBadge:$("portrait-badge")};
+    const state={url:null,lastSpeech:null};
+    const fold=v=>String(v||"").toLocaleLowerCase("tr-TR").normalize("NFD").replace(/[\u0300-\u036f]/gu,"");
+    const esc=v=>String(v).replace(/&/gu,"&amp;").replace(/</gu,"&lt;").replace(/>/gu,"&gt;").replace(/"/gu,"&quot;");
+    const pill=(el,ok,text)=>{el.textContent=text;el.className=`pill ${ok?"ok":"warn"}`};
+    const voiceById=id=>voices.find(v=>String(v.id)===String(id||"").trim())||null;
+    const initials=v=>{const t=String(v||"").split(/[\s/]+/u).filter(Boolean).slice(0,2);return t.length?t.map(x=>x[0]).join("").toUpperCase():"VX"};
+    const payload=o=>({model:els.model.value,voice:String(o||els.voiceId.value||"3"),input:els.inputText.value.trim(),response_format:"wav",speed:Number(els.speed.value),pitch:Number(els.pitch.value),intonation:Number(els.intonation.value),volume:Number(els.volume.value)});
+    const speakerStylesForCurrentVoice=()=>{const current=voiceById(els.voiceId.value);return current?voices.filter(v=>v.speaker_name===current.speaker_name).slice().sort((left,right)=>Number(left.id)-Number(right.id)):[]};
+    function prettySegmentSummary(summary){const raw=String(summary||"").trim();if(!raw)return"";return raw.split("|").map(part=>{const pivot=part.lastIndexOf(":");if(pivot===-1)return part;const id=part.slice(pivot+1).trim(),voice=voiceById(id);return voice?`${voice.style_tr} #${id}`:part}).join(" • ")}
+    function insertAtCursor(text){const field=els.inputText,start=field.selectionStart??field.value.length,end=field.selectionEnd??field.value.length,before=field.value.slice(0,start),after=field.value.slice(end),padBefore=before&&!/\s$/u.test(before)?" ":"",padAfter=after&&!/^\s/u.test(after)?" ":"";field.value=`${before}${padBefore}${text}${padAfter}${after}`;const caret=before.length+padBefore.length+text.length;field.focus();field.setSelectionRange(caret,caret);sync()}
+    function renderStyleTags(){const current=voiceById(els.voiceId.value),styles=speakerStylesForCurrentVoice();if(!current||styles.length===0){els.styleTags.innerHTML="";els.styleTagsNote.textContent="Pick a voice on the right. This area will show exact style tags supported by that character family.";return}els.styleTags.innerHTML=styles.map(voice=>`<button class="tag-chip${String(voice.id)===String(els.voiceId.value).trim()?" active":""}" type="button" data-insert-style-id="${esc(voice.id)}" title="Insert [[voice:${esc(voice.id)}]]"><span class="tag-id">${esc(voice.id)}</span><span class="tag-copy"><strong>${esc(voice.style_tr)}</strong><span>${esc(voice.style_name)}</span></span></button>`).join("");els.styleTagsNote.textContent=styles.length===1?`${current.speaker_latin} only has one installed style. Exact tags will stay on the same voice.`:`Exact style tags for ${current.speaker_latin}. Click any chip to insert [[voice:ID]] at the cursor and stay inside this character family.`}
+    function syncSelection(){const v=voiceById(els.voiceId.value),s=state.lastSpeech;els.selectedModelReadout.textContent=els.model.value;els.selectedTextMode.textContent=s?.textMode||"raw";els.selectedMoodMode.textContent=s?.mood||"auto";if(!v){els.selectedCharacter.textContent="No voice selected";els.selectedStyle.textContent="Pick a style chip from the wardrobe.";els.selectedBlurb.textContent="Voice description will appear here after you pick a style.";els.selectedFamily.textContent="-";els.portraitBadge.textContent="VX";return}els.selectedCharacter.textContent=v.speaker_latin;els.selectedStyle.textContent=`${v.style_tr} / ${v.style_name} / ID ${v.id}`;els.selectedBlurb.textContent=v.speaker_description_tr||"No description for this voice family yet.";els.selectedFamily.textContent=v.speaker_name;els.portraitBadge.textContent=initials(v.speaker_latin)}
+    function sync(){els.speedValue.textContent=Number(els.speed.value).toFixed(2);els.pitchValue.textContent=Number(els.pitch.value).toFixed(2);els.intonationValue.textContent=Number(els.intonation.value).toFixed(2);els.volumeValue.textContent=Number(els.volume.value).toFixed(2);els.selectedVoiceHero.textContent=els.voiceId.value||"-";els.configPreview.textContent=["Provider: OpenAI Compatible",`Base URL: ${bridgeApiBase}`,"API key: voicevox",`Model: ${els.model.value}`,`Voice: ${els.voiceId.value||"3"}`].join("\n");els.requestPreview.textContent=JSON.stringify(payload(),null,2);syncSelection();renderStyleTags()}
+    const searchIndex=v=>fold([v.speaker_name,v.speaker_latin,v.speaker_tr,v.speaker_description_tr,v.style_name,v.style_tr,v.id].join(" "));
+    function grouped(list){const m=new Map();for(const v of list){if(!m.has(v.speaker_name))m.set(v.speaker_name,[]);m.get(v.speaker_name).push(v)}return [...m.values()].sort((a,b)=>a[0].speaker_latin.localeCompare(b[0].speaker_latin,"tr"))}
+    function renderVoices(){const q=fold(els.search.value.trim()),list=q?voices.filter(v=>searchIndex(v).includes(q)):voices.slice(),groups=grouped(list);els.speakerCount.textContent=String(groups.length);els.voiceCount.textContent=String(list.length);els.emptyState.hidden=groups.length!==0;els.voiceGrid.innerHTML=groups.map(g=>{const f=g[0],styles=g.slice().sort((a,b)=>Number(a.id)-Number(b.id)).map(v=>`<div class="swrap"><button class="sbtn ${String(v.id)===String(els.voiceId.value).trim()?"active":""}" type="button" data-set-id="${esc(v.id)}"><span class="sid">${esc(v.id)}</span><span class="scopy"><strong>${esc(v.style_tr)}</strong><span>${esc(v.style_name)}</span></span></button><button class="play" type="button" data-preview-id="${esc(v.id)}">▶</button></div>`).join("");return `<article class="voice"><div><h4>${esc(f.speaker_latin)}</h4><div class="jp">${esc(f.speaker_name)}</div><p class="desc">${esc(f.speaker_description_tr||"No description yet.")}</p></div><div class="styles">${styles}</div></article>`}).join("")}
+    function renderEvents(events){if(!events.length){els.recentEvents.innerHTML='<div class="event"><p>No bridge events yet.</p></div>';return}const latest=events.find(e=>e.kind==="speech");if(latest)els.lastMoodHero.textContent=latest.mood||"normal";els.recentEvents.innerHTML=events.slice(0,10).map(e=>e.kind==="speech"?`<article class="event"><div class="meta"><span class="event-tag">${esc(e.mood||"normal")}</span><span>${esc(String(e.baseVoiceId||"-"))} -> ${esc(String(e.resolvedVoiceId||"-"))}</span><span>${esc(String(e.textMode||"raw"))}</span>${e.segmentSummary?`<span>${esc(prettySegmentSummary(String(e.segmentSummary)))}</span>`:""}</div><p>${esc(e.inputPreview||"")}</p></article>`:`<article class="event"><div class="meta"><span class="event-tag">error</span></div><p>${esc(e.message||"Unknown error")}</p></article>`).join("")}
+    async function refresh(){try{const [h,e,r]=await Promise.all([fetch(bridgeApiBase.replace(/\/v1\/$/u,"/healthz")),fetch(`${engineBaseUrl}version`).catch(()=>null),fetch(`${bridgeApiBase}debug/recent`).catch(()=>null)]);if(h&&h.ok){const j=await h.json();pill(els.bridgePill,true,`Bridge: online / ${j.port||"?"}`)}else pill(els.bridgePill,false,"Bridge: offline");if(e&&e.ok){pill(els.enginePill,true,`Engine: ${await e.text()}`)}else pill(els.enginePill,false,"Engine: offline");if(r&&r.ok){const j=await r.json();renderEvents(j.data||[])}}catch{pill(els.bridgePill,false,"Bridge: connection error");pill(els.enginePill,false,"Engine: connection error")}}
+    async function copy(text,ok,fail){try{await navigator.clipboard.writeText(text);els.statusLine.textContent=ok}catch{els.statusLine.textContent=fail}}
+    async function synth(o){const p=payload(o);sync();els.testBtn.disabled=true;els.statusLine.textContent="Synthesizing...";try{const r=await fetch(`${bridgeApiBase}audio/speech`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});if(!r.ok)throw new Error(await r.text()||`HTTP ${r.status}`);const b=await r.blob();if(state.url)URL.revokeObjectURL(state.url);state.url=URL.createObjectURL(b);els.audio.src=state.url;await els.audio.play();state.lastSpeech={baseVoiceId:r.headers.get("X-Voicevox-Base-Voice-Id"),resolvedVoiceId:r.headers.get("X-Voicevox-Voice-Id"),textMode:r.headers.get("X-Voicevox-Text-Mode"),mood:r.headers.get("X-Voicevox-Emotion"),reason:r.headers.get("X-Voicevox-Emotion-Reason"),segmentCount:r.headers.get("X-Voicevox-Segment-Count"),segmentSummary:r.headers.get("X-Voicevox-Segment-Summary"),logTime:r.headers.get("X-Voicevox-Log-Time")};els.responsePreview.textContent=JSON.stringify({...state.lastSpeech,contentType:r.headers.get("Content-Type")},null,2);els.statusLine.textContent="Voice ready and playing.";sync();renderVoices();await refresh()}catch(err){els.statusLine.textContent=`Synthesis error: ${err.message}`}finally{els.testBtn.disabled=false}}
+    function tab(id){document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.getAttribute("data-tab-target")===id));document.querySelectorAll(".tab").forEach(p=>p.classList.toggle("active",p.id===id))}
+    els.styleTags.addEventListener("click",event=>{const target=event.target;if(!(target instanceof HTMLElement))return;const button=target.closest("[data-insert-style-id]");if(!(button instanceof HTMLElement))return;const id=button.getAttribute("data-insert-style-id");if(!id)return;insertAtCursor(`[[voice:${id}]]`);els.statusLine.textContent=`Inserted exact style tag for voice ${id}.`});
+    document.querySelectorAll(".tab-btn").forEach(b=>b.addEventListener("click",()=>tab(b.getAttribute("data-tab-target"))));
+    [els.model,els.voiceId,els.inputText,els.speed,els.pitch,els.intonation,els.volume].forEach(el=>el.addEventListener("input",()=>{sync();renderVoices()}));
+    els.search.addEventListener("input",renderVoices);
+    els.voiceGrid.addEventListener("click",async e=>{const t=e.target;if(!(t instanceof HTMLElement))return;const s=t.closest("[data-set-id]");if(s instanceof HTMLElement){const id=s.getAttribute("data-set-id");if(id){els.voiceId.value=id;sync();renderVoices();els.statusLine.textContent=`Voice ID ${id} selected.`}return}const p=t.closest("[data-preview-id]");if(p instanceof HTMLElement){const id=p.getAttribute("data-preview-id");if(id){els.voiceId.value=id;sync();renderVoices();await synth(id)}}});
+    $("test-btn").addEventListener("click",()=>synth());$("refresh-btn").addEventListener("click",refresh);$("recent-btn").addEventListener("click",refresh);$("copy-voice-btn").addEventListener("click",()=>copy(els.voiceId.value||"3",`Voice ID ${els.voiceId.value} copied.`,"Voice ID could not be copied."));$("copy-config-btn").addEventListener("click",()=>copy(els.configPreview.textContent,"AIRI config copied.","AIRI config could not be copied."));
+    sync();renderVoices();refresh();
+
+    /* ═══════════════════════════════════════════════════════════════
+       Anime Phrase Atelier — Tier 2 Full
+       ═══════════════════════════════════════════════════════════════ */
+    (function(){
+      const phraseRaw=JSON.parse(document.getElementById("phrase-data").textContent);
+      const phraseEntries=Object.entries(phraseRaw).map(([romaji,kana])=>({romaji,kana}));
+
+      /* ── Category classification ── */
+      const CATEGORIES={
+        "Reactions":{icon:"😲",mood:"excited",keys:new Set()},
+        "Greetings":{icon:"👋",mood:"happy",keys:new Set()},
+        "Commands":{icon:"⚡",mood:"neutral",keys:new Set()},
+        "Cute / Moe":{icon:"🎀",mood:"cute",keys:new Set()},
+        "Fillers":{icon:"💬",mood:"neutral",keys:new Set()},
+        "Romance":{icon:"💕",mood:"love",keys:new Set()},
+        "Drama / Battle":{icon:"⚔️",mood:"battle",keys:new Set()},
+        "Onomatopoeia":{icon:"✨",mood:"cute",keys:new Set()}
+      };
+
+      const catRules=[
+        ["Greetings",["ohayou","ohayo","ohayou gozaimasu","konnichiwa","konbanwa","oyasumi","oyasuminasai","sayonara","mata ne","mata ashita","mata ato de","mata kondo","ja ne","jaa ne","ja mata","jaa mata","ja mata ne","jaa mata ne","arigatou","arigato","arigatou gozaimasu","doumo","doumo arigatou","sumimasen","suimasen","gomen","gomen ne","gomenne","gomen nasai","gomennasai","shitsurei shimasu","yoroshiku","yoroshiku ne","yoroshiku onegaishimasu","onegaishimasu","onegai","okaeri","okaerinasai","tadaima","ittekimasu","itterasshai","itadakimasu","gochisousama","gochisousama deshita","otsukaresama","otsukaresama desu","omedetou","omedetou gozaimasu","ganbatte","ganbatte ne","ganbarou","ganbarimashou","ki wo tsukete","odaiji ni","hisashiburi","ohisashiburi","genki","genki desu ka","moshi moshi","irasshai","irasshaimase","douzo","dozo","osewa ni narimasu","osaki ni","osakini shitsurei shimasu","otsu","yoropiku","arigatou ne"]],
+        ["Commands",["yamete","yamero","yamerooo","yameteee","dame","dame da","dame da yo","dame dame","chotto matte","matte","matte yo","matte ne","matte kudasai","matte kure","mate mate","mate yo","tasukete","tasukete yo","tasukeru kara","ike","ikou","ikimashou","ikuzo","ikuze","iku yo","kuru zo","hayaku","isoide","mou yamete","daijoubu","daijoubu da yo","daijoubu dayo","daijoubu dakara","daijoubu desu","muri","muri muri","muri dayo","maji muri","wakarimashita","wakatta","wakatta yo","wakaru","wakatteru","wakaranai","shiranai","shinjirarenai","shinjite","shinjiro","damare","urusai","urusai urusai","dete ike","ganbare","makeru na","makenaide","makeru mon ka","zettai","zettai ni","zettai makenai","mochiron","yurushite","yurusanai","kite","kite yo","kite ne","kochi kite","kocchi kite","koko ni ite","yamero tte","yamenaide","yamenasai","kiite","kiite yo","mite","mite mite","misete","misete yo","oshiete","oshiete yo","oshiete kudasai","yonde","yonde yo","mamotte","mamotte yo","mamore","nigete","hashire","tomare","tatakae","semero","kakatte koi","koi yo","yaru zo","yatte yaru","yoshi ikou","yameta hou ga ii","issho ni ikou","mou ikkai","mou ichido"]],
+        ["Romance",["suki","suki da","suki dayo","suki nano","suki janai","daisuki","daisuki da yo","daisuki nano","aishiteru","aitai","aitai yo","hazukashii","tereru","doki doki","waku waku","suki kamo","daisuki dayo","kimi no sei","meccha suki"]],
+        ["Cute / Moe",["niko niko","nico nico nii","tuturu","uguu","nya","nyan","nyaa","nyaan","nyafu","nyafuu","nyahaha","fufu","ufufu","ehehe","hehe","ahaha","uhuhu","kyun","kyun kyun","kira kira","run run","uki uki","nori nori","banzai","eto ne","etto ne","ano ne","nee nee","ne ne","un un","uun","pyon","pyon pyon","funya","funyaa","kirarin","poyo","poyon","iyaaan","iyaan"]],
+        ["Onomatopoeia",["pachi pachi","zawa zawa","shiin","buru buru","gaku gaku","fuwa fuwa","mofu mofu","puni puni","munyu","munimuni","pero","pero pero","jiii","biku biku","ira ira","uzu uzu","pikaan","dokaan","baan","don","gaaaan","gyaa","uwaaaa","eeeee","nyoro","nyoronyoro","mogu mogu","paku paku","pera pera","pika pika"]],
+        ["Drama / Battle",["ora ora","muda muda","yosha","yoshi","koko made da","owari da","zenryoku de","honki de","shinu na","shikkari shiro","gomen tteba","dattebayo","degozaru","desuno","shoubu da","makenaizo","yamero na","shinjite yo"]],
+        ["Fillers",["eeto","etto","eto","ano","saa","saa ne","maa ne","maa maa","ii yo","iiyo","ii ne","iinee","ii na","ii kedo","da yo ne","dayone","desu wa","nanodesu","nanodesu yo","nanoda","nanoyo","dakara","datte","nandakke","nanka","nante","doushite","dou shita no","dou shiyou","dou suru","tabun","chotto dake","mou chotto","betsu ni","betsu ni...","kirai","kirai janai","shiranai mon","iya mon","dou demo ii","shikatanai","hora hora","hora ne"]]
+      ];
+      for(const [cat,keys] of catRules)for(const k of keys)CATEGORIES[cat].keys.add(k);
+      /* anything not explicitly categorized → Reactions */
+      const allCategorized=new Set();for(const c of Object.values(CATEGORIES))for(const k of c.keys)allCategorized.add(k);
+      for(const e of phraseEntries)if(!allCategorized.has(e.romaji))CATEGORIES["Reactions"].keys.add(e.romaji);
+
+      function categoryOf(romaji){
+        for(const [name,c] of Object.entries(CATEGORIES))if(c.keys.has(romaji))return name;
+        return "Reactions";
+      }
+      function moodOf(romaji){return CATEGORIES[categoryOf(romaji)]?.mood||"neutral"}
+
+      /* ── Favorites + Recents (localStorage) ── */
+      const LS_FAV="pa_favorites",LS_REC="pa_recents";
+      function loadSet(key){try{return new Set(JSON.parse(localStorage.getItem(key)||"[]"))}catch{return new Set()}}
+      function saveSet(key,s){try{localStorage.setItem(key,JSON.stringify([...s]))}catch{}}
+      function loadArr(key){try{return JSON.parse(localStorage.getItem(key)||"[]")}catch{return[]}}
+      function saveArr(key,a){try{localStorage.setItem(key,JSON.stringify(a))}catch{}}
+      let favorites=loadSet(LS_FAV);
+      let recents=loadArr(LS_REC);
+      function addRecent(romaji){recents=recents.filter(r=>r!==romaji);recents.unshift(romaji);if(recents.length>12)recents.length=12;saveArr(LS_REC,recents)}
+
+      /* ── Compose Queue ── */
+      let queue=[];
+      const queueChips=$("queue-chips"),composeQueue=$("compose-queue");
+      function renderQueue(){
+        composeQueue.classList.toggle("empty",queue.length===0);
+        queueChips.innerHTML=queue.map((kana,i)=>`<span class="queue-chip">${esc(kana)} <span class="qc-remove" data-qi="${i}">✕</span></span>`).join("");
+      }
+      queueChips.addEventListener("click",e=>{const t=e.target.closest("[data-qi]");if(!t)return;queue.splice(Number(t.dataset.qi),1);renderQueue()});
+      $("queue-add-btn").addEventListener("click",()=>{if(!queue.length)return;insertAtCursor(queue.join("、"));queue=[];renderQueue();els.statusLine.textContent="Queue phrases added to input."});
+      $("queue-replace-btn").addEventListener("click",()=>{if(!queue.length)return;els.inputText.value=queue.join("、");queue=[];renderQueue();sync();els.statusLine.textContent="Input replaced with queue phrases."});
+      $("queue-clear-btn").addEventListener("click",()=>{queue=[];renderQueue()});
+
+      /* ── Collapsible toggle ── */
+      $("pa-toggle").addEventListener("click",()=>$("phrase-atelier").classList.toggle("collapsed"));
+
+      /* ── State ── */
+      let activeCategory="All";
+      const phraseSearch=$("phrase-search"),phraseGrid=$("phrase-grid"),phraseEmpty=$("phrase-empty"),categoryPills=$("category-pills");
+
+      /* ── Category pills ── */
+      function renderCategoryPills(){
+        const cats=["All","★ Favorites","⏱ Recent",...Object.keys(CATEGORIES)];
+        const counts={};
+        counts["All"]=phraseEntries.length;
+        counts["★ Favorites"]=favorites.size;
+        counts["⏱ Recent"]=recents.length;
+        for(const [n,c] of Object.entries(CATEGORIES))counts[n]=c.keys.size;
+        categoryPills.innerHTML=cats.map(c=>`<button class="cat-pill${c===activeCategory?" active":""}" type="button" data-cat="${esc(c)}">${esc(c)} <span class="cat-count">${counts[c]||0}</span></button>`).join("");
+      }
+      categoryPills.addEventListener("click",e=>{const t=e.target.closest("[data-cat]");if(!t)return;activeCategory=t.dataset.cat;renderCategoryPills();renderPhrases()});
+
+      /* ── Render phrases ── */
+      function renderPhrases(){
+        const q=fold(phraseSearch.value.trim());
+        let list=phraseEntries;
+
+        /* category filter */
+        if(activeCategory==="★ Favorites")list=list.filter(e=>favorites.has(e.romaji));
+        else if(activeCategory==="⏱ Recent"){const rs=new Set(recents);list=list.filter(e=>rs.has(e.romaji)).sort((a,b)=>recents.indexOf(a.romaji)-recents.indexOf(b.romaji));}
+        else if(activeCategory!=="All")list=list.filter(e=>categoryOf(e.romaji)===activeCategory);
+
+        /* search filter */
+        if(q)list=list.filter(e=>fold(e.romaji).includes(q)||fold(e.kana).includes(q));
+
+        phraseEmpty.hidden=list.length>0;
+        $("phrase-count-stat").textContent=`${phraseEntries.length} phrases`;
+
+        phraseGrid.innerHTML=list.map(e=>{
+          const mood=moodOf(e.romaji);
+          const isFav=favorites.has(e.romaji);
+          return `<div class="phrase-card">
+            <button class="pc-fav${isFav?" faved":""}" type="button" data-fav="${esc(e.romaji)}" title="${isFav?"Unfavorite":"Favorite"}">${isFav?"★":"☆"}</button>
+            <div class="pc-romaji">${esc(e.romaji)}</div>
+            <div class="pc-kana">${esc(e.kana)}</div>
+            <span class="pc-mood mood-${mood}">${mood}</span>
+            <div class="pc-actions">
+              <button class="pa-insert" type="button" data-insert-kana="${esc(e.kana)}" data-insert-romaji="${esc(e.romaji)}">Insert Fixed</button>
+              <button class="pa-copy" type="button" data-copy-kana="${esc(e.kana)}">Copy Fixed</button>
+              <button class="pa-test" type="button" data-test-kana="${esc(e.kana)}">Test ▶</button>
+              <button class="pa-queue" type="button" data-queue-kana="${esc(e.kana)}">+ Queue</button>
+            </div>
+          </div>`;
+        }).join("");
+      }
+
+      /* ── Phrase grid event delegation ── */
+      phraseGrid.addEventListener("click",async e=>{
+        const t=e.target;
+        if(!(t instanceof HTMLElement))return;
+
+        /* Favorite */
+        const fav=t.closest("[data-fav]");
+        if(fav){const r=fav.dataset.fav;if(favorites.has(r))favorites.delete(r);else favorites.add(r);saveSet(LS_FAV,favorites);renderCategoryPills();renderPhrases();return;}
+
+        /* Insert */
+        const ins=t.closest("[data-insert-kana]");
+        if(ins){insertAtCursor(ins.dataset.insertKana);addRecent(ins.dataset.insertRomaji);els.statusLine.textContent=`Inserted: ${ins.dataset.insertKana}`;renderCategoryPills();return;}
+
+        /* Copy */
+        const cp=t.closest("[data-copy-kana]");
+        if(cp){await copy(cp.dataset.copyKana,`Copied: ${cp.dataset.copyKana}`,"Copy failed.");return;}
+
+        /* Test */
+        const te=t.closest("[data-test-kana]");
+        if(te){
+          const origText=els.inputText.value;
+          const origModel=els.model.value;
+          els.inputText.value=te.dataset.testKana;
+          els.model.value="voicevox-tts-raw";
+          sync();
+          await synth();
+          els.inputText.value=origText;
+          els.model.value=origModel;
+          sync();
+          return;
+        }
+
+        /* Queue */
+        const qu=t.closest("[data-queue-kana]");
+        if(qu){queue.push(qu.dataset.queueKana);renderQueue();els.statusLine.textContent=`Added to queue: ${qu.dataset.queueKana}`;return;}
+      });
+
+      phraseSearch.addEventListener("input",renderPhrases);
+
+      /* ── Init ── */
+      renderCategoryPills();
+      renderPhrases();
+      renderQueue();
+    })();
+  </script>
+</body>
+</html>
+
+

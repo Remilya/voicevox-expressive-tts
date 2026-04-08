@@ -1,0 +1,1778 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VOICEVOX Ses Menusu</title>
+  <style>
+    :root {
+      --paper: #f7f1e4;
+      --paper-2: #fffaf0;
+      --ink: #201815;
+      --muted: #705a52;
+      --line: #d8c5b6;
+      --accent: #c74f2a;
+      --accent-2: #ffcf7d;
+      --card: rgba(255, 250, 240, 0.86);
+      --shadow: 0 18px 48px rgba(64, 33, 18, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 207, 125, 0.35), transparent 28%),
+        radial-gradient(circle at top right, rgba(199, 79, 42, 0.18), transparent 22%),
+        linear-gradient(180deg, #f9f3e7 0%, #efe0d1 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: min(1280px, calc(100% - 32px));
+      margin: 24px auto 48px;
+    }
+
+    .hero,
+    .toolbar,
+    .speaker-card {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      border-radius: 28px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -50px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 207, 125, 0.72), rgba(255, 207, 125, 0));
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(199, 79, 42, 0.14);
+      color: var(--muted);
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0;
+      line-height: 1.6;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 12px 14px;
+      border-radius: 18px;
+      min-width: 140px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat-value {
+      display: block;
+      margin-top: 4px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .toolbar {
+      margin-top: 18px;
+      border-radius: 26px;
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .control-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 120ms ease, transform 120ms ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(199, 79, 42, 0.6);
+      transform: translateY(-1px);
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .toolbar-note,
+    .status-line {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .status-line {
+      min-height: 20px;
+    }
+
+    .grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .speaker-card {
+      border-radius: 26px;
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .speaker-top {
+      display: grid;
+      gap: 8px;
+    }
+
+    .speaker-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      align-items: baseline;
+    }
+
+    .speaker-latin {
+      font-size: 28px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .speaker-jp {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .speaker-desc {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .style-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .style-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(216, 197, 182, 0.95);
+    }
+
+    .style-id {
+      min-width: 54px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #211713, #7f3120);
+      color: #fff7ee;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .style-main {
+      min-width: 0;
+    }
+
+    .style-tr {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .style-jp {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .style-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      padding: 10px 14px;
+      transition: transform 120ms ease, filter 120ms ease, opacity 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.72;
+      transform: none;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .preview-btn {
+      background: linear-gradient(135deg, var(--accent), #7f3120);
+      color: #fff7ee;
+      box-shadow: 0 10px 26px rgba(140, 46, 20, 0.22);
+    }
+
+    .empty {
+      margin-top: 24px;
+      border-radius: 24px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 820px) {
+      .shell {
+        width: min(100% - 20px, 100%);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .style-row {
+        grid-template-columns: 1fr;
+      }
+
+      .style-actions {
+        justify-content: stretch;
+      }
+
+      .style-actions button {
+        flex: 1 1 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">VOICEVOX + AIRI ses menusu</div>
+      <h1>Turkce okunabilir karakter listesi</h1>
+      <p class="lead">
+        Buradaki kartlar senin bilgisayarinda su an kurulu olan VOICEVOX seslerini gosteriyor.
+        AIRI icinde kullanmak icin sadece <strong>Voice ID</strong> numarasini kopyalaman yeterli.
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">Karakter</span>
+          <span class="stat-value" id="speaker-count">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Ses stili</span>
+          <span class="stat-value" id="voice-count">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Cikis</span>
+          <span class="stat-value">AIRI Voice ID</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="control-group">
+        <label for="search">Ara</label>
+        <input id="search" type="search" placeholder="Karakter, ton, Japonca ad veya Latin ad ile ara">
+        <div class="toolbar-note">
+          Ornek: <strong>Nekotsukai</strong>, <strong>fisilti</strong>, <strong>korku</strong>, <strong>Zundamon</strong>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="preview-text">On izleme cumlesi</label>
+        <textarea id="preview-text">Merhaba, ben senin robot kiz ses menunum. Begendigin sesi bulunca ID numarasini AIRI icine yaz.</textarea>
+        <div class="status-line" id="status-line">Hazir.</div>
+        <audio id="audio-player" controls preload="none"></audio>
+      </div>
+    </section>
+
+    <section class="grid" id="voice-grid"></section>
+    <section class="empty" id="empty-state" hidden>Bu aramaya uyan ses bulunamadi.</section>
+
+    <footer class="footer">
+      <span>Olusturulma zamani: 2026-04-07 21:09:00</span>
+      <span>Bridge hedefi: http://127.0.0.1:55221/v1/</span>
+    </footer>
+  </main>
+
+  <script id="voice-data" type="application/json">[
+    {
+        "id":  "2",
+        "type":  "talk",
+        "speaker_name":  "四国めたん",
+        "speaker_latin":  "Shikoku Metan",
+        "speaker_tr":  "Shikoku Metan",
+        "speaker_description_tr":  "Net ve kendinden emin bir kadın sesi.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "0",
+        "type":  "talk",
+        "speaker_name":  "四国めたん",
+        "speaker_latin":  "Shikoku Metan",
+        "speaker_tr":  "Shikoku Metan",
+        "speaker_description_tr":  "Net ve kendinden emin bir kadın sesi.",
+        "style_name":  "あまあま",
+        "style_tr":  "Cok tatli"
+    },
+    {
+        "id":  "6",
+        "type":  "talk",
+        "speaker_name":  "四国めたん",
+        "speaker_latin":  "Shikoku Metan",
+        "speaker_tr":  "Shikoku Metan",
+        "speaker_description_tr":  "Net ve kendinden emin bir kadın sesi.",
+        "style_name":  "ツンツン",
+        "style_tr":  "Tsundere / sert"
+    },
+    {
+        "id":  "4",
+        "type":  "talk",
+        "speaker_name":  "四国めたん",
+        "speaker_latin":  "Shikoku Metan",
+        "speaker_tr":  "Shikoku Metan",
+        "speaker_description_tr":  "Net ve kendinden emin bir kadın sesi.",
+        "style_name":  "セクシー",
+        "style_tr":  "Seksi"
+    },
+    {
+        "id":  "36",
+        "type":  "talk",
+        "speaker_name":  "四国めたん",
+        "speaker_latin":  "Shikoku Metan",
+        "speaker_tr":  "Shikoku Metan",
+        "speaker_description_tr":  "Net ve kendinden emin bir kadın sesi.",
+        "style_name":  "ささやき",
+        "style_tr":  "Fisilti"
+    },
+    {
+        "id":  "37",
+        "type":  "talk",
+        "speaker_name":  "四国めたん",
+        "speaker_latin":  "Shikoku Metan",
+        "speaker_tr":  "Shikoku Metan",
+        "speaker_description_tr":  "Net ve kendinden emin bir kadın sesi.",
+        "style_name":  "ヒソヒソ",
+        "style_tr":  "Cok kisik ses"
+    },
+    {
+        "id":  "3",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "1",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "あまあま",
+        "style_tr":  "Cok tatli"
+    },
+    {
+        "id":  "7",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "ツンツン",
+        "style_tr":  "Tsundere / sert"
+    },
+    {
+        "id":  "5",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "セクシー",
+        "style_tr":  "Seksi"
+    },
+    {
+        "id":  "22",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "ささやき",
+        "style_tr":  "Fisilti"
+    },
+    {
+        "id":  "38",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "ヒソヒソ",
+        "style_tr":  "Cok kisik ses"
+    },
+    {
+        "id":  "75",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "ヘロヘロ",
+        "style_tr":  "Bitkin"
+    },
+    {
+        "id":  "76",
+        "type":  "talk",
+        "speaker_name":  "ずんだもん",
+        "speaker_latin":  "Zundamon",
+        "speaker_tr":  "Zundamon",
+        "speaker_description_tr":  "Cocuksu ve yuksek tonlu bir ses.",
+        "style_name":  "なみだめ",
+        "style_tr":  "Aglamakli"
+    },
+    {
+        "id":  "8",
+        "type":  "talk",
+        "speaker_name":  "春日部つむぎ",
+        "speaker_latin":  "Kasukabe Tsumugi",
+        "speaker_tr":  "Kasukabe Tsumugi",
+        "speaker_description_tr":  "Canli ve parlak bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "10",
+        "type":  "talk",
+        "speaker_name":  "雨晴はう",
+        "speaker_latin":  "Amehare Hau",
+        "speaker_tr":  "Amehare Hau",
+        "speaker_description_tr":  "Nazik ve tatli bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "9",
+        "type":  "talk",
+        "speaker_name":  "波音リツ",
+        "speaker_latin":  "Namine Ritsu",
+        "speaker_tr":  "Namine Ritsu",
+        "speaker_description_tr":  "Daha dusuk ve cool bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "65",
+        "type":  "talk",
+        "speaker_name":  "波音リツ",
+        "speaker_latin":  "Namine Ritsu",
+        "speaker_tr":  "Namine Ritsu",
+        "speaker_description_tr":  "Daha dusuk ve cool bir ses.",
+        "style_name":  "クイーン",
+        "style_tr":  "Kralice"
+    },
+    {
+        "id":  "11",
+        "type":  "talk",
+        "speaker_name":  "玄野武宏",
+        "speaker_latin":  "Kurono Takehiro",
+        "speaker_tr":  "Kurono Takehiro",
+        "speaker_description_tr":  "Genc yetiskin erkek hissi veren ferah bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "39",
+        "type":  "talk",
+        "speaker_name":  "玄野武宏",
+        "speaker_latin":  "Kurono Takehiro",
+        "speaker_tr":  "Kurono Takehiro",
+        "speaker_description_tr":  "Genc yetiskin erkek hissi veren ferah bir ses.",
+        "style_name":  "喜び",
+        "style_tr":  "Neseli"
+    },
+    {
+        "id":  "40",
+        "type":  "talk",
+        "speaker_name":  "玄野武宏",
+        "speaker_latin":  "Kurono Takehiro",
+        "speaker_tr":  "Kurono Takehiro",
+        "speaker_description_tr":  "Genc yetiskin erkek hissi veren ferah bir ses.",
+        "style_name":  "ツンギレ",
+        "style_tr":  "Sert ve ofkeli"
+    },
+    {
+        "id":  "41",
+        "type":  "talk",
+        "speaker_name":  "玄野武宏",
+        "speaker_latin":  "Kurono Takehiro",
+        "speaker_tr":  "Kurono Takehiro",
+        "speaker_description_tr":  "Genc yetiskin erkek hissi veren ferah bir ses.",
+        "style_name":  "悲しみ",
+        "style_tr":  "Uzgun"
+    },
+    {
+        "id":  "12",
+        "type":  "talk",
+        "speaker_name":  "白上虎太郎",
+        "speaker_latin":  "Shirakami Kotaro",
+        "speaker_tr":  "Shirakami Kotaro",
+        "speaker_description_tr":  "Sesi yeni kalinlasmis bir genc erkek tonu.",
+        "style_name":  "ふつう",
+        "style_tr":  "Duz"
+    },
+    {
+        "id":  "32",
+        "type":  "talk",
+        "speaker_name":  "白上虎太郎",
+        "speaker_latin":  "Shirakami Kotaro",
+        "speaker_tr":  "Shirakami Kotaro",
+        "speaker_description_tr":  "Sesi yeni kalinlasmis bir genc erkek tonu.",
+        "style_name":  "わーい",
+        "style_tr":  "Sevincli"
+    },
+    {
+        "id":  "33",
+        "type":  "talk",
+        "speaker_name":  "白上虎太郎",
+        "speaker_latin":  "Shirakami Kotaro",
+        "speaker_tr":  "Shirakami Kotaro",
+        "speaker_description_tr":  "Sesi yeni kalinlasmis bir genc erkek tonu.",
+        "style_name":  "びくびく",
+        "style_tr":  "Tedirgin"
+    },
+    {
+        "id":  "34",
+        "type":  "talk",
+        "speaker_name":  "白上虎太郎",
+        "speaker_latin":  "Shirakami Kotaro",
+        "speaker_tr":  "Shirakami Kotaro",
+        "speaker_description_tr":  "Sesi yeni kalinlasmis bir genc erkek tonu.",
+        "style_name":  "おこ",
+        "style_tr":  "Kizgin"
+    },
+    {
+        "id":  "35",
+        "type":  "talk",
+        "speaker_name":  "白上虎太郎",
+        "speaker_latin":  "Shirakami Kotaro",
+        "speaker_tr":  "Shirakami Kotaro",
+        "speaker_description_tr":  "Sesi yeni kalinlasmis bir genc erkek tonu.",
+        "style_name":  "びえーん",
+        "style_tr":  "Aglayan"
+    },
+    {
+        "id":  "13",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "81",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "熱血",
+        "style_tr":  "Atesli"
+    },
+    {
+        "id":  "82",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "不機嫌",
+        "style_tr":  "Somurtkan"
+    },
+    {
+        "id":  "83",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "喜び",
+        "style_tr":  "Neseli"
+    },
+    {
+        "id":  "84",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "しっとり",
+        "style_tr":  "Yumusak / duygulu"
+    },
+    {
+        "id":  "85",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "かなしみ",
+        "style_tr":  "Uzgun"
+    },
+    {
+        "id":  "86",
+        "type":  "talk",
+        "speaker_name":  "青山龍星",
+        "speaker_latin":  "Aoyama Ryusei",
+        "speaker_tr":  "Aoyama Ryusei",
+        "speaker_description_tr":  "Agir ve dusuk frekansli bir erkek sesi.",
+        "style_name":  "囁き",
+        "style_tr":  "Fisilti"
+    },
+    {
+        "id":  "14",
+        "type":  "talk",
+        "speaker_name":  "冥鳴ひまり",
+        "speaker_latin":  "Meimei Himari",
+        "speaker_tr":  "Meimei Himari",
+        "speaker_description_tr":  "Yumusak ve sicak bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "16",
+        "type":  "talk",
+        "speaker_name":  "九州そら",
+        "speaker_latin":  "Kyushu Sora",
+        "speaker_tr":  "Kyushu Sora",
+        "speaker_description_tr":  "Zarif ve olgun bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "15",
+        "type":  "talk",
+        "speaker_name":  "九州そら",
+        "speaker_latin":  "Kyushu Sora",
+        "speaker_tr":  "Kyushu Sora",
+        "speaker_description_tr":  "Zarif ve olgun bir ses.",
+        "style_name":  "あまあま",
+        "style_tr":  "Cok tatli"
+    },
+    {
+        "id":  "18",
+        "type":  "talk",
+        "speaker_name":  "九州そら",
+        "speaker_latin":  "Kyushu Sora",
+        "speaker_tr":  "Kyushu Sora",
+        "speaker_description_tr":  "Zarif ve olgun bir ses.",
+        "style_name":  "ツンツン",
+        "style_tr":  "Tsundere / sert"
+    },
+    {
+        "id":  "17",
+        "type":  "talk",
+        "speaker_name":  "九州そら",
+        "speaker_latin":  "Kyushu Sora",
+        "speaker_tr":  "Kyushu Sora",
+        "speaker_description_tr":  "Zarif ve olgun bir ses.",
+        "style_name":  "セクシー",
+        "style_tr":  "Seksi"
+    },
+    {
+        "id":  "19",
+        "type":  "talk",
+        "speaker_name":  "九州そら",
+        "speaker_latin":  "Kyushu Sora",
+        "speaker_tr":  "Kyushu Sora",
+        "speaker_description_tr":  "Zarif ve olgun bir ses.",
+        "style_name":  "ささやき",
+        "style_tr":  "Fisilti"
+    },
+    {
+        "id":  "20",
+        "type":  "talk",
+        "speaker_name":  "もち子さん",
+        "speaker_latin":  "Mochiko-san",
+        "speaker_tr":  "Mochiko-san",
+        "speaker_description_tr":  "Net ve sakin bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "66",
+        "type":  "talk",
+        "speaker_name":  "もち子さん",
+        "speaker_latin":  "Mochiko-san",
+        "speaker_tr":  "Mochiko-san",
+        "speaker_description_tr":  "Net ve sakin bir ses.",
+        "style_name":  "セクシー／あん子",
+        "style_tr":  "Seksi / Anko"
+    },
+    {
+        "id":  "77",
+        "type":  "talk",
+        "speaker_name":  "もち子さん",
+        "speaker_latin":  "Mochiko-san",
+        "speaker_tr":  "Mochiko-san",
+        "speaker_description_tr":  "Net ve sakin bir ses.",
+        "style_name":  "泣き",
+        "style_tr":  "Aglamakli"
+    },
+    {
+        "id":  "78",
+        "type":  "talk",
+        "speaker_name":  "もち子さん",
+        "speaker_latin":  "Mochiko-san",
+        "speaker_tr":  "Mochiko-san",
+        "speaker_description_tr":  "Net ve sakin bir ses.",
+        "style_name":  "怒り",
+        "style_tr":  "Ofkeli"
+    },
+    {
+        "id":  "79",
+        "type":  "talk",
+        "speaker_name":  "もち子さん",
+        "speaker_latin":  "Mochiko-san",
+        "speaker_tr":  "Mochiko-san",
+        "speaker_description_tr":  "Net ve sakin bir ses.",
+        "style_name":  "喜び",
+        "style_tr":  "Neseli"
+    },
+    {
+        "id":  "80",
+        "type":  "talk",
+        "speaker_name":  "もち子さん",
+        "speaker_latin":  "Mochiko-san",
+        "speaker_tr":  "Mochiko-san",
+        "speaker_description_tr":  "Net ve sakin bir ses.",
+        "style_name":  "のんびり",
+        "style_tr":  "Agir agir / rahat"
+    },
+    {
+        "id":  "21",
+        "type":  "talk",
+        "speaker_name":  "剣崎雌雄",
+        "speaker_latin":  "Kenzaki Mesuo",
+        "speaker_tr":  "Kenzaki Mesuo",
+        "speaker_description_tr":  "Guven veren, dengeli bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "23",
+        "type":  "talk",
+        "speaker_name":  "WhiteCUL",
+        "speaker_latin":  "WhiteCUL",
+        "speaker_tr":  "WhiteCUL",
+        "speaker_description_tr":  "Dinlemesi rahat, duz ve temiz bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "24",
+        "type":  "talk",
+        "speaker_name":  "WhiteCUL",
+        "speaker_latin":  "WhiteCUL",
+        "speaker_tr":  "WhiteCUL",
+        "speaker_description_tr":  "Dinlemesi rahat, duz ve temiz bir ses.",
+        "style_name":  "たのしい",
+        "style_tr":  "Eglenceli"
+    },
+    {
+        "id":  "25",
+        "type":  "talk",
+        "speaker_name":  "WhiteCUL",
+        "speaker_latin":  "WhiteCUL",
+        "speaker_tr":  "WhiteCUL",
+        "speaker_description_tr":  "Dinlemesi rahat, duz ve temiz bir ses.",
+        "style_name":  "かなしい",
+        "style_tr":  "Uzgun"
+    },
+    {
+        "id":  "26",
+        "type":  "talk",
+        "speaker_name":  "WhiteCUL",
+        "speaker_latin":  "WhiteCUL",
+        "speaker_tr":  "WhiteCUL",
+        "speaker_description_tr":  "Dinlemesi rahat, duz ve temiz bir ses.",
+        "style_name":  "びえーん",
+        "style_tr":  "Aglayan"
+    },
+    {
+        "id":  "27",
+        "type":  "talk",
+        "speaker_name":  "後鬼",
+        "speaker_latin":  "Goki",
+        "speaker_tr":  "Goki",
+        "speaker_description_tr":  "Kucaklayici ve agirbasli bir ses.",
+        "style_name":  "人間ver.",
+        "style_tr":  "Insan surumu"
+    },
+    {
+        "id":  "28",
+        "type":  "talk",
+        "speaker_name":  "後鬼",
+        "speaker_latin":  "Goki",
+        "speaker_tr":  "Goki",
+        "speaker_description_tr":  "Kucaklayici ve agirbasli bir ses.",
+        "style_name":  "ぬいぐるみver.",
+        "style_tr":  "Pelus surumu"
+    },
+    {
+        "id":  "87",
+        "type":  "talk",
+        "speaker_name":  "後鬼",
+        "speaker_latin":  "Goki",
+        "speaker_tr":  "Goki",
+        "speaker_description_tr":  "Kucaklayici ve agirbasli bir ses.",
+        "style_name":  "人間（怒り）ver.",
+        "style_tr":  "Insan surumu (kizgin)"
+    },
+    {
+        "id":  "88",
+        "type":  "talk",
+        "speaker_name":  "後鬼",
+        "speaker_latin":  "Goki",
+        "speaker_tr":  "Goki",
+        "speaker_description_tr":  "Kucaklayici ve agirbasli bir ses.",
+        "style_name":  "鬼ver.",
+        "style_tr":  "Oni surumu"
+    },
+    {
+        "id":  "29",
+        "type":  "talk",
+        "speaker_name":  "No.7",
+        "speaker_latin":  "No.7",
+        "speaker_tr":  "No.7",
+        "speaker_description_tr":  "Saglam ve vakur bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "30",
+        "type":  "talk",
+        "speaker_name":  "No.7",
+        "speaker_latin":  "No.7",
+        "speaker_tr":  "No.7",
+        "speaker_description_tr":  "Saglam ve vakur bir ses.",
+        "style_name":  "アナウンス",
+        "style_tr":  "Anons"
+    },
+    {
+        "id":  "31",
+        "type":  "talk",
+        "speaker_name":  "No.7",
+        "speaker_latin":  "No.7",
+        "speaker_tr":  "No.7",
+        "speaker_description_tr":  "Saglam ve vakur bir ses.",
+        "style_name":  "読み聞かせ",
+        "style_tr":  "Masal gibi okuma"
+    },
+    {
+        "id":  "42",
+        "type":  "talk",
+        "speaker_name":  "ちび式じい",
+        "speaker_latin":  "Chibi Shiki-jii",
+        "speaker_tr":  "Chibi Shiki-jii",
+        "speaker_description_tr":  "Samimi, hafif kisik bir yasli sesi.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "43",
+        "type":  "talk",
+        "speaker_name":  "櫻歌ミコ",
+        "speaker_latin":  "Ouka Miko",
+        "speaker_tr":  "Ouka Miko",
+        "speaker_description_tr":  "Sevimli bir kiz sesi.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "44",
+        "type":  "talk",
+        "speaker_name":  "櫻歌ミコ",
+        "speaker_latin":  "Ouka Miko",
+        "speaker_tr":  "Ouka Miko",
+        "speaker_description_tr":  "Sevimli bir kiz sesi.",
+        "style_name":  "第二形態",
+        "style_tr":  "Ikinci form"
+    },
+    {
+        "id":  "45",
+        "type":  "talk",
+        "speaker_name":  "櫻歌ミコ",
+        "speaker_latin":  "Ouka Miko",
+        "speaker_tr":  "Ouka Miko",
+        "speaker_description_tr":  "Sevimli bir kiz sesi.",
+        "style_name":  "ロリ",
+        "style_tr":  "Loli"
+    },
+    {
+        "id":  "46",
+        "type":  "talk",
+        "speaker_name":  "小夜/SAYO",
+        "speaker_latin":  "Sayo",
+        "speaker_tr":  "Sayo",
+        "speaker_description_tr":  "Sakin ve yumusak huylu bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "47",
+        "type":  "talk",
+        "speaker_name":  "ナースロボ＿タイプＴ",
+        "speaker_latin":  "Nurse Robo Type-T",
+        "speaker_tr":  "Nurse Robo Type-T",
+        "speaker_description_tr":  "Sogukkanli ve olculu bir robotik ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "48",
+        "type":  "talk",
+        "speaker_name":  "ナースロボ＿タイプＴ",
+        "speaker_latin":  "Nurse Robo Type-T",
+        "speaker_tr":  "Nurse Robo Type-T",
+        "speaker_description_tr":  "Sogukkanli ve olculu bir robotik ses.",
+        "style_name":  "楽々",
+        "style_tr":  "Rahat"
+    },
+    {
+        "id":  "49",
+        "type":  "talk",
+        "speaker_name":  "ナースロボ＿タイプＴ",
+        "speaker_latin":  "Nurse Robo Type-T",
+        "speaker_tr":  "Nurse Robo Type-T",
+        "speaker_description_tr":  "Sogukkanli ve olculu bir robotik ses.",
+        "style_name":  "恐怖",
+        "style_tr":  "Korku"
+    },
+    {
+        "id":  "50",
+        "type":  "talk",
+        "speaker_name":  "ナースロボ＿タイプＴ",
+        "speaker_latin":  "Nurse Robo Type-T",
+        "speaker_tr":  "Nurse Robo Type-T",
+        "speaker_description_tr":  "Sogukkanli ve olculu bir robotik ses.",
+        "style_name":  "内緒話",
+        "style_tr":  "Sir verir gibi"
+    },
+    {
+        "id":  "51",
+        "type":  "talk",
+        "speaker_name":  "†聖騎士 紅桜†",
+        "speaker_latin":  "Holy Knight Benizakura",
+        "speaker_tr":  "Holy Knight Benizakura",
+        "speaker_description_tr":  "Neseli ve belirgin artikulasyonlu bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "52",
+        "type":  "talk",
+        "speaker_name":  "雀松朱司",
+        "speaker_latin":  "Wakamatsu Akashi",
+        "speaker_tr":  "Wakamatsu Akashi",
+        "speaker_description_tr":  "Sessiz, dengeli ve stabil bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "53",
+        "type":  "talk",
+        "speaker_name":  "麒ヶ島宗麟",
+        "speaker_latin":  "Kigashima Sourin",
+        "speaker_tr":  "Kigashima Sourin",
+        "speaker_description_tr":  "Oturakli amca tonu.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "54",
+        "type":  "talk",
+        "speaker_name":  "春歌ナナ",
+        "speaker_latin":  "Haruka Nana",
+        "speaker_tr":  "Haruka Nana",
+        "speaker_description_tr":  "Canli ve guclu bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "55",
+        "type":  "talk",
+        "speaker_name":  "猫使アル",
+        "speaker_latin":  "Nekotsukai Aru",
+        "speaker_tr":  "Nekotsukai Aru",
+        "speaker_description_tr":  "Dolgun ve samimi bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "56",
+        "type":  "talk",
+        "speaker_name":  "猫使アル",
+        "speaker_latin":  "Nekotsukai Aru",
+        "speaker_tr":  "Nekotsukai Aru",
+        "speaker_description_tr":  "Dolgun ve samimi bir ses.",
+        "style_name":  "おちつき",
+        "style_tr":  "Sakin"
+    },
+    {
+        "id":  "57",
+        "type":  "talk",
+        "speaker_name":  "猫使アル",
+        "speaker_latin":  "Nekotsukai Aru",
+        "speaker_tr":  "Nekotsukai Aru",
+        "speaker_description_tr":  "Dolgun ve samimi bir ses.",
+        "style_name":  "うきうき",
+        "style_tr":  "Keyifli"
+    },
+    {
+        "id":  "110",
+        "type":  "talk",
+        "speaker_name":  "猫使アル",
+        "speaker_latin":  "Nekotsukai Aru",
+        "speaker_tr":  "Nekotsukai Aru",
+        "speaker_description_tr":  "Dolgun ve samimi bir ses.",
+        "style_name":  "つよつよ",
+        "style_tr":  "Guclu"
+    },
+    {
+        "id":  "111",
+        "type":  "talk",
+        "speaker_name":  "猫使アル",
+        "speaker_latin":  "Nekotsukai Aru",
+        "speaker_tr":  "Nekotsukai Aru",
+        "speaker_description_tr":  "Dolgun ve samimi bir ses.",
+        "style_name":  "へろへろ",
+        "style_tr":  "Bitkin"
+    },
+    {
+        "id":  "58",
+        "type":  "talk",
+        "speaker_name":  "猫使ビィ",
+        "speaker_latin":  "Nekotsukai Bii",
+        "speaker_tr":  "Nekotsukai Bii",
+        "speaker_description_tr":  "Saf ve masum bir kiz tonu.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "59",
+        "type":  "talk",
+        "speaker_name":  "猫使ビィ",
+        "speaker_latin":  "Nekotsukai Bii",
+        "speaker_tr":  "Nekotsukai Bii",
+        "speaker_description_tr":  "Saf ve masum bir kiz tonu.",
+        "style_name":  "おちつき",
+        "style_tr":  "Sakin"
+    },
+    {
+        "id":  "60",
+        "type":  "talk",
+        "speaker_name":  "猫使ビィ",
+        "speaker_latin":  "Nekotsukai Bii",
+        "speaker_tr":  "Nekotsukai Bii",
+        "speaker_description_tr":  "Saf ve masum bir kiz tonu.",
+        "style_name":  "人見知り",
+        "style_tr":  "Cekingen"
+    },
+    {
+        "id":  "112",
+        "type":  "talk",
+        "speaker_name":  "猫使ビィ",
+        "speaker_latin":  "Nekotsukai Bii",
+        "speaker_tr":  "Nekotsukai Bii",
+        "speaker_description_tr":  "Saf ve masum bir kiz tonu.",
+        "style_name":  "つよつよ",
+        "style_tr":  "Guclu"
+    },
+    {
+        "id":  "61",
+        "type":  "talk",
+        "speaker_name":  "中国うさぎ",
+        "speaker_latin":  "Chugoku Usagi",
+        "speaker_tr":  "Chugoku Usagi",
+        "speaker_description_tr":  "Gizemli ama taze his veren bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "62",
+        "type":  "talk",
+        "speaker_name":  "中国うさぎ",
+        "speaker_latin":  "Chugoku Usagi",
+        "speaker_tr":  "Chugoku Usagi",
+        "speaker_description_tr":  "Gizemli ama taze his veren bir ses.",
+        "style_name":  "おどろき",
+        "style_tr":  "Saskin"
+    },
+    {
+        "id":  "63",
+        "type":  "talk",
+        "speaker_name":  "中国うさぎ",
+        "speaker_latin":  "Chugoku Usagi",
+        "speaker_tr":  "Chugoku Usagi",
+        "speaker_description_tr":  "Gizemli ama taze his veren bir ses.",
+        "style_name":  "こわがり",
+        "style_tr":  "Korkak"
+    },
+    {
+        "id":  "64",
+        "type":  "talk",
+        "speaker_name":  "中国うさぎ",
+        "speaker_latin":  "Chugoku Usagi",
+        "speaker_tr":  "Chugoku Usagi",
+        "speaker_description_tr":  "Gizemli ama taze his veren bir ses.",
+        "style_name":  "へろへろ",
+        "style_tr":  "Bitkin"
+    },
+    {
+        "id":  "67",
+        "type":  "talk",
+        "speaker_name":  "栗田まろん",
+        "speaker_latin":  "Kurita Maron",
+        "speaker_tr":  "Kurita Maron",
+        "speaker_description_tr":  "Derin ve androjeni bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "68",
+        "type":  "talk",
+        "speaker_name":  "あいえるたん",
+        "speaker_latin":  "IL-tan",
+        "speaker_tr":  "IL-tan",
+        "speaker_description_tr":  "Rahatlatan, yumusak bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "69",
+        "type":  "talk",
+        "speaker_name":  "満別花丸",
+        "speaker_latin":  "Manbetsu Hanamaru",
+        "speaker_tr":  "Manbetsu Hanamaru",
+        "speaker_description_tr":  "Canli ve dikkat ceken bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "70",
+        "type":  "talk",
+        "speaker_name":  "満別花丸",
+        "speaker_latin":  "Manbetsu Hanamaru",
+        "speaker_tr":  "Manbetsu Hanamaru",
+        "speaker_description_tr":  "Canli ve dikkat ceken bir ses.",
+        "style_name":  "元気",
+        "style_tr":  "Enerjik"
+    },
+    {
+        "id":  "71",
+        "type":  "talk",
+        "speaker_name":  "満別花丸",
+        "speaker_latin":  "Manbetsu Hanamaru",
+        "speaker_tr":  "Manbetsu Hanamaru",
+        "speaker_description_tr":  "Canli ve dikkat ceken bir ses.",
+        "style_name":  "ささやき",
+        "style_tr":  "Fisilti"
+    },
+    {
+        "id":  "72",
+        "type":  "talk",
+        "speaker_name":  "満別花丸",
+        "speaker_latin":  "Manbetsu Hanamaru",
+        "speaker_tr":  "Manbetsu Hanamaru",
+        "speaker_description_tr":  "Canli ve dikkat ceken bir ses.",
+        "style_name":  "ぶりっ子",
+        "style_tr":  "Cilveli"
+    },
+    {
+        "id":  "73",
+        "type":  "talk",
+        "speaker_name":  "満別花丸",
+        "speaker_latin":  "Manbetsu Hanamaru",
+        "speaker_tr":  "Manbetsu Hanamaru",
+        "speaker_description_tr":  "Canli ve dikkat ceken bir ses.",
+        "style_name":  "ボーイ",
+        "style_tr":  "Erkeksi"
+    },
+    {
+        "id":  "74",
+        "type":  "talk",
+        "speaker_name":  "琴詠ニア",
+        "speaker_latin":  "Kotoyomi Nia",
+        "speaker_tr":  "Kotoyomi Nia",
+        "speaker_description_tr":  "Akici ama mekanik his veren bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "89",
+        "type":  "talk",
+        "speaker_name":  "Voidoll",
+        "speaker_latin":  "Voidoll",
+        "speaker_tr":  "Voidoll",
+        "speaker_description_tr":  "Elektronik ve cekingen bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "90",
+        "type":  "talk",
+        "speaker_name":  "ぞん子",
+        "speaker_latin":  "Zonko",
+        "speaker_tr":  "Zonko",
+        "speaker_description_tr":  "Ateşli ve canli bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "91",
+        "type":  "talk",
+        "speaker_name":  "ぞん子",
+        "speaker_latin":  "Zonko",
+        "speaker_tr":  "Zonko",
+        "speaker_description_tr":  "Ateşli ve canli bir ses.",
+        "style_name":  "低血圧",
+        "style_tr":  "Uykulu"
+    },
+    {
+        "id":  "92",
+        "type":  "talk",
+        "speaker_name":  "ぞん子",
+        "speaker_latin":  "Zonko",
+        "speaker_tr":  "Zonko",
+        "speaker_description_tr":  "Ateşli ve canli bir ses.",
+        "style_name":  "覚醒",
+        "style_tr":  "Uyanmis"
+    },
+    {
+        "id":  "93",
+        "type":  "talk",
+        "speaker_name":  "ぞん子",
+        "speaker_latin":  "Zonko",
+        "speaker_tr":  "Zonko",
+        "speaker_description_tr":  "Ateşli ve canli bir ses.",
+        "style_name":  "実況風",
+        "style_tr":  "Yayinci gibi"
+    },
+    {
+        "id":  "94",
+        "type":  "talk",
+        "speaker_name":  "中部つるぎ",
+        "speaker_latin":  "Chubu Tsurugi",
+        "speaker_tr":  "Chubu Tsurugi",
+        "speaker_description_tr":  "Heybetli ve varligi guclu bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "95",
+        "type":  "talk",
+        "speaker_name":  "中部つるぎ",
+        "speaker_latin":  "Chubu Tsurugi",
+        "speaker_tr":  "Chubu Tsurugi",
+        "speaker_description_tr":  "Heybetli ve varligi guclu bir ses.",
+        "style_name":  "怒り",
+        "style_tr":  "Ofkeli"
+    },
+    {
+        "id":  "96",
+        "type":  "talk",
+        "speaker_name":  "中部つるぎ",
+        "speaker_latin":  "Chubu Tsurugi",
+        "speaker_tr":  "Chubu Tsurugi",
+        "speaker_description_tr":  "Heybetli ve varligi guclu bir ses.",
+        "style_name":  "ヒソヒソ",
+        "style_tr":  "Cok kisik ses"
+    },
+    {
+        "id":  "97",
+        "type":  "talk",
+        "speaker_name":  "中部つるぎ",
+        "speaker_latin":  "Chubu Tsurugi",
+        "speaker_tr":  "Chubu Tsurugi",
+        "speaker_description_tr":  "Heybetli ve varligi guclu bir ses.",
+        "style_name":  "おどおど",
+        "style_tr":  "Urkek"
+    },
+    {
+        "id":  "98",
+        "type":  "talk",
+        "speaker_name":  "中部つるぎ",
+        "speaker_latin":  "Chubu Tsurugi",
+        "speaker_tr":  "Chubu Tsurugi",
+        "speaker_description_tr":  "Heybetli ve varligi guclu bir ses.",
+        "style_name":  "絶望と敗北",
+        "style_tr":  "Umutsuz ve yenilmis"
+    },
+    {
+        "id":  "99",
+        "type":  "talk",
+        "speaker_name":  "離途",
+        "speaker_latin":  "Rito",
+        "speaker_tr":  "Rito",
+        "speaker_description_tr":  "Nefesli, sarip sarmalayan bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "101",
+        "type":  "talk",
+        "speaker_name":  "離途",
+        "speaker_latin":  "Rito",
+        "speaker_tr":  "Rito",
+        "speaker_description_tr":  "Nefesli, sarip sarmalayan bir ses.",
+        "style_name":  "シリアス",
+        "style_tr":  "Ciddi"
+    },
+    {
+        "id":  "100",
+        "type":  "talk",
+        "speaker_name":  "黒沢冴白",
+        "speaker_latin":  "Kurosawa Kohaku",
+        "speaker_tr":  "Kurosawa Kohaku",
+        "speaker_description_tr":  "Kendine guvenen ve guclu cikan bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "102",
+        "type":  "talk",
+        "speaker_name":  "ユーレイちゃん",
+        "speaker_latin":  "Yurei-chan",
+        "speaker_tr":  "Yurei-chan",
+        "speaker_description_tr":  "Yumusak ve dalgali his veren bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "103",
+        "type":  "talk",
+        "speaker_name":  "ユーレイちゃん",
+        "speaker_latin":  "Yurei-chan",
+        "speaker_tr":  "Yurei-chan",
+        "speaker_description_tr":  "Yumusak ve dalgali his veren bir ses.",
+        "style_name":  "甘々",
+        "style_tr":  "Cok tatli"
+    },
+    {
+        "id":  "104",
+        "type":  "talk",
+        "speaker_name":  "ユーレイちゃん",
+        "speaker_latin":  "Yurei-chan",
+        "speaker_tr":  "Yurei-chan",
+        "speaker_description_tr":  "Yumusak ve dalgali his veren bir ses.",
+        "style_name":  "哀しみ",
+        "style_tr":  "Huzunlu"
+    },
+    {
+        "id":  "105",
+        "type":  "talk",
+        "speaker_name":  "ユーレイちゃん",
+        "speaker_latin":  "Yurei-chan",
+        "speaker_tr":  "Yurei-chan",
+        "speaker_description_tr":  "Yumusak ve dalgali his veren bir ses.",
+        "style_name":  "ささやき",
+        "style_tr":  "Fisilti"
+    },
+    {
+        "id":  "106",
+        "type":  "talk",
+        "speaker_name":  "ユーレイちゃん",
+        "speaker_latin":  "Yurei-chan",
+        "speaker_tr":  "Yurei-chan",
+        "speaker_description_tr":  "Yumusak ve dalgali his veren bir ses.",
+        "style_name":  "ツクモちゃん",
+        "style_tr":  "Tsukumo-chan modu"
+    },
+    {
+        "id":  "107",
+        "type":  "talk",
+        "speaker_name":  "東北ずん子",
+        "speaker_latin":  "Tohoku Zunko",
+        "speaker_tr":  "Tohoku Zunko",
+        "speaker_description_tr":  "Zarif ve sempatik bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "108",
+        "type":  "talk",
+        "speaker_name":  "東北きりたん",
+        "speaker_latin":  "Tohoku Kiritan",
+        "speaker_tr":  "Tohoku Kiritan",
+        "speaker_description_tr":  "Duru ve mutevazi bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "109",
+        "type":  "talk",
+        "speaker_name":  "東北イタコ",
+        "speaker_latin":  "Tohoku Itako",
+        "speaker_tr":  "Tohoku Itako",
+        "speaker_description_tr":  "Zarif ve yankisi olan bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "113",
+        "type":  "talk",
+        "speaker_name":  "あんこもん",
+        "speaker_latin":  "Ankomon",
+        "speaker_tr":  "Ankomon",
+        "speaker_description_tr":  "Kontrollu ama hirsli bir ses.",
+        "style_name":  "ノーマル",
+        "style_tr":  "Normal"
+    },
+    {
+        "id":  "114",
+        "type":  "talk",
+        "speaker_name":  "あんこもん",
+        "speaker_latin":  "Ankomon",
+        "speaker_tr":  "Ankomon",
+        "speaker_description_tr":  "Kontrollu ama hirsli bir ses.",
+        "style_name":  "つよつよ",
+        "style_tr":  "Guclu"
+    },
+    {
+        "id":  "115",
+        "type":  "talk",
+        "speaker_name":  "あんこもん",
+        "speaker_latin":  "Ankomon",
+        "speaker_tr":  "Ankomon",
+        "speaker_description_tr":  "Kontrollu ama hirsli bir ses.",
+        "style_name":  "よわよわ",
+        "style_tr":  "Zayif"
+    },
+    {
+        "id":  "116",
+        "type":  "talk",
+        "speaker_name":  "あんこもん",
+        "speaker_latin":  "Ankomon",
+        "speaker_tr":  "Ankomon",
+        "speaker_description_tr":  "Kontrollu ama hirsli bir ses.",
+        "style_name":  "けだるげ",
+        "style_tr":  "Bikkin"
+    },
+    {
+        "id":  "117",
+        "type":  "talk",
+        "speaker_name":  "あんこもん",
+        "speaker_latin":  "Ankomon",
+        "speaker_tr":  "Ankomon",
+        "speaker_description_tr":  "Kontrollu ama hirsli bir ses.",
+        "style_name":  "ささやき",
+        "style_tr":  "Fisilti"
+    }
+]</script>
+  <script>
+    const bridgeBaseUrl = "http://127.0.0.1:55221/v1/";
+    const rawVoiceData = document.getElementById("voice-data").textContent;
+    const voices = JSON.parse(rawVoiceData);
+
+    const speakerCountEl = document.getElementById("speaker-count");
+    const voiceCountEl = document.getElementById("voice-count");
+    const voiceGridEl = document.getElementById("voice-grid");
+    const emptyStateEl = document.getElementById("empty-state");
+    const searchEl = document.getElementById("search");
+    const previewTextEl = document.getElementById("preview-text");
+    const statusLineEl = document.getElementById("status-line");
+    const audioPlayerEl = document.getElementById("audio-player");
+
+    let activeButton = null;
+    let activeObjectUrl = null;
+
+    function foldText(value) {
+      return String(value || "")
+        .toLocaleLowerCase("tr-TR")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function buildSearchIndex(voice) {
+      return foldText([
+        voice.speaker_name,
+        voice.speaker_latin,
+        voice.speaker_tr,
+        voice.speaker_description_tr,
+        voice.style_name,
+        voice.style_tr,
+        voice.id
+      ].join(" "));
+    }
+
+    function groupVoices(filteredVoices) {
+      const groups = new Map();
+
+      for (const voice of filteredVoices) {
+        if (!groups.has(voice.speaker_name)) {
+          groups.set(voice.speaker_name, []);
+        }
+        groups.get(voice.speaker_name).push(voice);
+      }
+
+      return Array.from(groups.values()).sort((left, right) => {
+        return left[0].speaker_latin.localeCompare(right[0].speaker_latin, "tr");
+      });
+    }
+
+    function render() {
+      const query = foldText(searchEl.value.trim());
+      const filteredVoices = query
+        ? voices.filter(voice => buildSearchIndex(voice).includes(query))
+        : voices.slice();
+
+      const groups = groupVoices(filteredVoices);
+      speakerCountEl.textContent = String(groups.length);
+      voiceCountEl.textContent = String(filteredVoices.length);
+      emptyStateEl.hidden = groups.length !== 0;
+
+      voiceGridEl.innerHTML = groups.map(group => {
+        const first = group[0];
+        const stylesHtml = group
+          .sort((left, right) => Number(left.id) - Number(right.id))
+          .map(voice => {
+            return `
+              <div class="style-row">
+                <div class="style-id">${escapeHtml(voice.id)}</div>
+                <div class="style-main">
+                  <div class="style-tr">${escapeHtml(voice.style_tr)}</div>
+                  <div class="style-jp">${escapeHtml(voice.style_name)}</div>
+                </div>
+                <div class="style-actions">
+                  <button class="copy-btn" type="button" data-copy-id="${escapeHtml(voice.id)}">ID kopyala</button>
+                  <button class="preview-btn" type="button" data-preview-id="${escapeHtml(voice.id)}" data-preview-name="${escapeHtml(voice.speaker_latin)} - ${escapeHtml(voice.style_tr)}">Dinle</button>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+        return `
+          <article class="speaker-card">
+            <div class="speaker-top">
+              <div class="speaker-title">
+                <div class="speaker-latin">${escapeHtml(first.speaker_latin)}</div>
+                <div class="speaker-jp">${escapeHtml(first.speaker_name)}</div>
+              </div>
+              <p class="speaker-desc">${escapeHtml(first.speaker_description_tr || "Aciklama yok.")}</p>
+            </div>
+            <div class="style-list">${stylesHtml}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function copyVoiceId(id) {
+      try {
+        await navigator.clipboard.writeText(String(id));
+        statusLineEl.textContent = `Voice ID ${id} panoya kopyalandi.`;
+      } catch (error) {
+        statusLineEl.textContent = `ID ${id} kopyalanamadi. Elle kopyala: ${id}`;
+      }
+    }
+
+    async function previewVoice(button, voiceId, voiceLabel) {
+      const previewText = previewTextEl.value.trim() || "Merhaba, bu bir VOICEVOX testidir.";
+
+      if (activeButton) {
+        activeButton.disabled = false;
+      }
+
+      activeButton = button;
+      activeButton.disabled = true;
+      statusLineEl.textContent = `${voiceLabel} yukleniyor...`;
+
+      try {
+        const response = await fetch(`${bridgeBaseUrl}audio/speech`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "voicevox",
+            voice: String(voiceId),
+            input: previewText,
+            response_format: "wav"
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || `HTTP ${response.status}`);
+        }
+
+        const audioBlob = await response.blob();
+        if (activeObjectUrl) {
+          URL.revokeObjectURL(activeObjectUrl);
+        }
+        activeObjectUrl = URL.createObjectURL(audioBlob);
+        audioPlayerEl.src = activeObjectUrl;
+        await audioPlayerEl.play();
+        statusLineEl.textContent = `${voiceLabel} caliyor.`;
+      } catch (error) {
+        statusLineEl.textContent = `On izleme basarisiz: ${error.message}`;
+      } finally {
+        if (activeButton) {
+          activeButton.disabled = false;
+        }
+      }
+    }
+
+    voiceGridEl.addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+
+      const copyId = target.getAttribute("data-copy-id");
+      if (copyId) {
+        await copyVoiceId(copyId);
+        return;
+      }
+
+      const previewId = target.getAttribute("data-preview-id");
+      if (previewId) {
+        const previewName = target.getAttribute("data-preview-name") || `Voice ${previewId}`;
+        await previewVoice(target, previewId, previewName);
+      }
+    });
+
+    searchEl.addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>
+

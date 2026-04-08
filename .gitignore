@@ -1,0 +1,20 @@
+# VOICEVOX OpenAI Bridge - Ignore List
+
+# Dependencies
+node_modules/
+.npm/
+
+# Logs
+voicevox-bridge.log
+*.log
+
+# Generated UI files (these are built locally per-user)
+voicevox-control-center.html
+
+# Local overrides (users should create their own from the .example files)
+tr-overrides.json
+en-overrides.json
+
+# Temporary / testing files
+.env
+.env.local
