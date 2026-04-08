@@ -294,6 +294,7 @@ Edit `data/anime-japanese-phrases.json` directly. This is a flat `{ "romaji": "k
 | `tools/voice-browser.template.html` | HTML template for the control center |
 | `voicevox-control-center.html` | Generated control center (from template + data) |
 | `data/voicevox-translations.tr.json` | Turkish voice name translations |
+| `data/available-voices.md` | Full list of character names, descriptions, and IDs |
 | `data/anime-japanese-phrases.json` | 430+ anime romaji→kana phrase mappings |
 | `data/sillytavern-setup.md` | SillyTavern integration guide |
 | `tr-overrides.example.json` | Example Turkish word override file |
@@ -310,6 +311,6 @@ Edit `data/anime-japanese-phrases.json` directly. This is a flat `{ "romaji": "k
 - 100% local — no paid API, no external servers
 - VOICEVOX is a Japanese TTS engine — non-Japanese text will have a Japanese accent (that's the charm)
 - The bridge transliterates Turkish and English into Japanese phonetics before synthesis
-- Style IDs are character-specific — use `list-voices-tr` or the control center to find them
+- Style IDs are character-specific — see [Available Voices List](data/available-voices.md) or use `list-voices-tr` / the control center to find them
 - The `recent` command shows the bridge's last mood decisions like `58 → 60 | mood=shy`
 - Override files and phrase data are hot-reloaded on bridge restart
