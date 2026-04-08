@@ -1,5 +1,7 @@
 # VOICEVOX Expressive TTS Bridge
 
+> ✨ **Created by [@Remilya](https://github.com/Remilya) · [remilya.dev](https://remilya.dev)**
+
 An advanced local toolkit that turns **VOICEVOX** into an **OpenAI-compatible TTS endpoint** — built specifically for AI Companions, **SillyTavern**, **Project AIRI**, **AIVTubers**, and multi-character roleplay dialogue.
 
 Unlike basic API wrappers, this bridge is highly modified to support **inline multi-voice dialogue, automatic emotion switching, Turkish & English phonetic transliteration, and a built-in Anime Phrase Atelier**.
@@ -37,7 +39,7 @@ This starts the VOICEVOX engine, launches the bridge on `http://127.0.0.1:55221/
 ### Open the control center
 
 ```powershell
-.\voicevox-airi.bat gui
+.\voicevox-control-center.bat
 ```
 
 Generates and opens the HTML control center with voice browser, TTS playground, and Anime Phrase Atelier.
@@ -205,29 +207,18 @@ Edit `data/anime-japanese-phrases.json` directly. This is a flat `{ "romaji": "k
 
 ---
 
-## CLI commands
+## CLI commands (Advanced)
 
 ```powershell
-.\voicevox-airi.bat help               # Show all commands
-.\voicevox-airi.bat doctor             # Check paths, ports, tools
-.\voicevox-airi.bat setup              # Start engine + bridge + print config
-.\voicevox-airi.bat start              # Start engine + bridge + AIRI
-.\voicevox-airi.bat start-bridge       # Start or restart just the bridge
-.\voicevox-airi.bat restart-bridge     # Restart the bridge
-.\voicevox-airi.bat stop               # Stop the bridge
-.\voicevox-airi.bat status             # Show bridge and engine health
-.\voicevox-airi.bat config             # Print AIRI config values
-.\voicevox-airi.bat list-voices        # Raw voice list
-.\voicevox-airi.bat list-voices-tr     # Turkish-friendly voice list
-.\voicevox-airi.bat list-voices-json   # JSON voice dump
-.\voicevox-airi.bat recent             # Recent mood decisions
-.\voicevox-airi.bat log-tail           # Raw bridge log
-.\voicevox-airi.bat export-voices-html # Generate control center HTML
-.\voicevox-airi.bat gui                # Generate and open control center
+.\tools\voicevox-airi.bat help               # Show all commands
+.\tools\voicevox-airi.bat doctor             # Check paths, ports, tools
+.\tools\voicevox-airi.bat restart-bridge     # Restart the bridge
+.\tools\voicevox-airi.bat status             # Show bridge and engine health
+.\tools\voicevox-airi.bat export-voices-html # Generate control center HTML
 
 # Text preprocessing preview
-.\voicevox-airi.ps1 preview-tr -Text "Merhaba nasilsin?"
-.\voicevox-airi.ps1 preview-en -Text "Hello, how are you?"
+.\tools\voicevox-airi.ps1 preview-tr -Text "Merhaba nasilsin?"
+.\tools\voicevox-airi.ps1 preview-en -Text "Hello, how are you?"
 ```
 
 ---
@@ -288,8 +279,8 @@ Edit `data/anime-japanese-phrases.json` directly. This is a flat `{ "romaji": "k
 
 | File | Purpose |
 |---|---|
-| `voicevox-airi.ps1` | Main CLI script |
-| `voicevox-airi.bat` | BAT launcher for the CLI |
+| `tools/voicevox-airi.ps1` | Main CLI script |
+| `tools/voicevox-airi.bat` | BAT launcher for the CLI |
 | `tools/voicevox-openai-bridge.mjs` | Node.js OpenAI-compatible bridge server |
 | `tools/voice-browser.template.html` | HTML template for the control center |
 | `voicevox-control-center.html` | Generated control center (from template + data) |
@@ -299,10 +290,10 @@ Edit `data/anime-japanese-phrases.json` directly. This is a flat `{ "romaji": "k
 | `data/sillytavern-setup.md` | SillyTavern integration guide |
 | `tr-overrides.example.json` | Example Turkish word override file |
 | `en-overrides.example.json` | Example English word override file |
-| `list-voicevox-voices.bat` | Quick voice list shortcut |
-| `voicevox-recent.bat` | Quick recent events shortcut |
+| `tools/list-voicevox-voices.bat` | Quick voice list shortcut |
+| `tools/voicevox-recent.bat` | Quick recent events shortcut |
 | `voicevox-control-center.bat` | Quick control center shortcut |
-| `restart-voicevox-bridge.bat` | Quick bridge restart shortcut |
+| `tools/restart-voicevox-bridge.bat` | Quick bridge restart shortcut |
 
 ---
 
@@ -314,3 +305,10 @@ Edit `data/anime-japanese-phrases.json` directly. This is a flat `{ "romaji": "k
 - Style IDs are character-specific — see [Available Voices List](data/available-voices.md) or use `list-voices-tr` / the control center to find them
 - The `recent` command shows the bridge's last mood decisions like `58 → 60 | mood=shy`
 - Override files and phrase data are hot-reloaded on bridge restart
+
+---
+
+## License & Credits
+
+Created and maintained by [@Remilya](https://github.com/Remilya) — [remilya.dev](https://remilya.dev).
+This project is open-source and available under the [MIT License](LICENSE).

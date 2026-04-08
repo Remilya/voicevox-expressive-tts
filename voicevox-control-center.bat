@@ -1,3 +1,3 @@
 @echo off
 setlocal
-call "%~dp0voicevox-airi.bat" control-ui
+call "%~dp0tools\voicevox-airi.bat" control-ui

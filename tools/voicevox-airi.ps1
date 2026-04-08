@@ -13,16 +13,18 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $ScriptRoot = Split-Path -Parent $PSCommandPath
-$BridgeScript = Join-Path $ScriptRoot 'tools\voicevox-openai-bridge.mjs'
+$AppRoot = Split-Path -Parent $ScriptRoot
+
+$BridgeScript = Join-Path $ScriptRoot 'voicevox-openai-bridge.mjs'
 $BridgePort = 55221
 $EnginePort = 50021
 $BridgeBaseUrl = "http://127.0.0.1:$BridgePort"
 $EngineBaseUrl = "http://127.0.0.1:$EnginePort"
-$BridgeLogPath = Join-Path $ScriptRoot 'voicevox-bridge.log'
-$TranslationsPath = Join-Path $ScriptRoot 'data\voicevox-translations.tr.json'
-$PhrasesPath = Join-Path $ScriptRoot 'data\anime-japanese-phrases.json'
-$VoiceBrowserTemplatePath = Join-Path $ScriptRoot 'tools\voice-browser.template.html'
-$VoiceBrowserHtmlPath = Join-Path $ScriptRoot 'voicevox-control-center.html'
+$BridgeLogPath = Join-Path $AppRoot 'voicevox-bridge.log'
+$TranslationsPath = Join-Path $AppRoot 'data\voicevox-translations.tr.json'
+$PhrasesPath = Join-Path $AppRoot 'data\anime-japanese-phrases.json'
+$VoiceBrowserTemplatePath = Join-Path $ScriptRoot 'voice-browser.template.html'
+$VoiceBrowserHtmlPath = Join-Path $AppRoot 'voicevox-control-center.html'
 $DefaultAiriRoot = if (Test-Path (Join-Path $ScriptRoot 'airi.exe')) {
   $ScriptRoot
 }

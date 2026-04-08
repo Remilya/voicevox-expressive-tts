@@ -14,7 +14,7 @@ git config --global user.email "bot@example.com"
 :: Initialize and Add
 git init
 git add .
-git commit -m "✨ Initial release: VOICEVOX Expressive TTS Bridge"
+git commit -m "✨ feat: Add Remilya authorship, MIT License, available-voices list & reorganize directory structure for cleaner root"
 git branch -M main
 
 :: Remote and Push
